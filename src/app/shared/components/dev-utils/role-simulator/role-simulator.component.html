@@ -1,0 +1,139 @@
+<div class="role-simulator-container">
+    <p-card header="Role Management" subheader="View role mappings and test different role combinations">
+        <!-- Keycloak Role Mappings (Always visible) -->
+        <div class="mb-4">
+            <h3>Keycloak Role Mappings</h3>
+            <p class="text-sm text-600 mb-3">Shows which Keycloak roles map to which application roles (loaded from API)</p>
+
+            <div *ngIf="isLoading" class="text-center p-4">
+                <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+                <p class="mt-2 text-600">Loading role mappings from API...</p>
+            </div>
+
+            <div *ngIf="!isLoading" class="grid">
+                <div *ngFor="let mapping of roleMappingsList" class="col-12 md:col-6 lg:col-4">
+                    <p-card class="mb-2">
+                        <div class="role-mapping-item">
+                            <div class="flex justify-content-between align-items-center mb-2">
+                                <span class="font-semibold">{{ mapping.roleInfo?.displayName || mapping.internalRole }}</span>
+                                <p-tag [value]="mapping.internalRole" [severity]="getRoleSeverity(mapping.internalRole)" size="small"></p-tag>
+                            </div>
+                            <p class="text-sm text-600 mb-2">{{ mapping.roleInfo?.description || 'No description available' }}</p>
+                            <div class="text-xs">
+                                <strong>Keycloak Role:</strong><br />
+                                <code class="bg-gray-100 p-1 border-round block mt-1 text-xs" style="word-break: break-all">{{ mapping.keycloakRole }}</code>
+                            </div>
+                        </div>
+                    </p-card>
+                </div>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Role Simulator (Only in Mock Mode) -->
+        <div *ngIf="!isMockMode" class="mb-4">
+            <h3>Role Simulator</h3>
+            <p-message severity="info" text="Role simulation is only available in mock mode. Switch to mock environment to test different role combinations."></p-message>
+        </div>
+
+        <div *ngIf="isMockMode">
+            <h3>Role Simulator</h3>
+            <p class="text-sm text-600 mb-3">Test different role combinations to see menu and access changes</p>
+
+            <!-- Current Roles -->
+            <div class="mb-4">
+                <h4>Current Active Roles</h4>
+                <div class="flex flex-wrap gap-2">
+                    <p-tag *ngFor="let role of currentUserRoles" [value]="role" [severity]="getRoleSeverity(role)" class="cursor-default"> </p-tag>
+                    <p-tag *ngIf="currentUserRoles.length === 0" value="No roles active" severity="secondary"></p-tag>
+                </div>
+            </div>
+
+            <!-- Quick Role Combinations -->
+            <div class="mb-4">
+                <h4>Quick Role Combinations</h4>
+                <p-toolbar>
+                    <ng-template pTemplate="start">
+                        <div class="flex flex-wrap gap-2">
+                            <p-button *ngFor="let combo of roleCombinations" [label]="combo.name" size="small" severity="secondary" (onClick)="applyRoleCombination(combo)" [pTooltip]="'Roles: ' + combo.roles.join(', ')" tooltipPosition="top">
+                            </p-button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="end">
+                        <div class="flex gap-2">
+                            <p-button label="Clear All" severity="danger" size="small" (onClick)="clearAllRoles()"> </p-button>
+                            <p-button label="Reset to Admin" severity="success" size="small" (onClick)="resetToAdmin()"> </p-button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+
+            <div class="grid">
+                <!-- Individual Role Selection -->
+                <div class="col-12 md:col-8">
+                    <h4>Available Roles</h4>
+                    <div class="grid">
+                        <div *ngFor="let role of availableRoles" class="col-12 md:col-6">
+                            <div class="field-checkbox role-item">
+                                <p-checkbox [inputId]="'role-' + role.name" [binary]="true" [ngModel]="isRoleSelected(role.name)" (ngModelChange)="onRoleToggle(role.name, $event)"> </p-checkbox>
+                                <label [for]="'role-' + role.name" class="ml-2">
+                                    <div class="role-info">
+                                        <div class="role-name font-semibold">{{ role.displayName }}</div>
+                                        <div class="role-description text-sm text-500">{{ role.description }}</div>
+                                        <p-tag [value]="role.name" [severity]="getRoleSeverity(role.name)" class="mt-1"> </p-tag>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Access Summary -->
+                <div class="col-12 md:col-4">
+                    <h4>Access Summary</h4>
+                    <p-card>
+                        <div class="access-info">
+                            <h5>Selected Roles ({{ selectedRoles.length }})</h5>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <p-tag *ngFor="let role of selectedRoles" [value]="role" [severity]="getRoleSeverity(role)" class="text-xs"> </p-tag>
+                                <span *ngIf="selectedRoles.length === 0" class="text-500">No roles selected</span>
+                            </div>
+
+                            <p-divider></p-divider>
+
+                            <h5>Menu Access</h5>
+                            <ul class="access-list text-sm">
+                                <li *ngIf="currentUserRoles.includes(RolesService.ADMIN_ROLE)" class="text-green-600"><i class="pi pi-check mr-1"></i> Full system access</li>
+                                <li *ngIf="currentUserRoles.includes('fuv_offerte')" class="text-green-600"><i class="pi pi-check mr-1"></i> FUV Offerte module</li>
+                                <li *ngIf="currentUserRoles.includes('aktenentscheid')" class="text-green-600"><i class="pi pi-check mr-1"></i> Aktenentscheid BB</li>
+                                <li *ngIf="currentUserRoles.includes('ie_auswertung')" class="text-green-600"><i class="pi pi-check mr-1"></i> INEX Auswertung</li>
+                                <li *ngIf="currentUserRoles.includes('medirueck')" class="text-green-600"><i class="pi pi-check mr-1"></i> Medirück</li>
+                                <li *ngIf="currentUserRoles.includes(RolesService.SYSTEM_ROLE)" class="text-green-600"><i class="pi pi-check mr-1"></i> KPM Tool</li>
+                                <li *ngIf="currentUserRoles.length === 0" class="text-red-600"><i class="pi pi-times mr-1"></i> No access</li>
+                            </ul>
+
+                            <p-divider></p-divider>
+
+                            <h5>Special Features</h5>
+                            <ul class="access-list text-sm">
+                                <li [class]="currentUserRoles.includes(RolesService.ADMIN_ROLE) ? 'text-green-600' : 'text-red-600'">
+                                    <i class="pi" [class]="currentUserRoles.includes(RolesService.ADMIN_ROLE) ? 'pi-check' : 'pi-times'" class="mr-1"></i>
+                                    Theme configurator
+                                </li>
+                                <li [class]="currentUserRoles.includes(RolesService.ADMIN_ROLE) || currentUserRoles.includes(RolesService.SYSTEM_ROLE) ? 'text-green-600' : 'text-red-600'">
+                                    <i class="pi" [class]="currentUserRoles.includes(RolesService.ADMIN_ROLE) || currentUserRoles.includes(RolesService.SYSTEM_ROLE) ? 'pi-check' : 'pi-times'" class="mr-1"></i>
+                                    Developer tools
+                                </li>
+                            </ul>
+                        </div>
+                    </p-card>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p-message severity="info" text="Changes are applied immediately. Navigate through the menu to see the effect of different role combinations."> </p-message>
+            </div>
+        </div>
+    </p-card>
+</div>

@@ -1,0 +1,1203 @@
+{
+  "app": {
+    "title": "Outil d’offres AFC",
+    "description": "outil Syrius KPM – Un outil pour les collaborateurs des agences dans la gestion des clients et des partenaires"
+  },
+  "status": {
+    "notFound": {
+      "title": "Page introuvable",
+      "message": "La ressource demandée n’a pas été trouvée.",
+      "button": "Retour à la vue d’ensemble"
+    },
+    "error": {
+      "title": "Erreur survenue",
+      "message": "La ressource demandée n’a pas été trouvée.",
+      "technicalDetails": "Détails techniques:",
+      "button": {
+        "dashboard": "Retour au tableau de bord",
+        "reload": "Recharger la page"
+      },
+      "causes": {
+        "keycloak_inactive": {
+          "title": "Erreur d’authentification",
+          "message": "L’authentification Keycloak n’est pas configurée correctement."
+        },
+        "stage_mismatch": {
+          "title": "Erreur de configuration"
+        },
+        "api_error": {
+          "title": "Erreur API"
+        }
+      }
+    },
+    "accessDenied": {
+      "title": "Accès refusé",
+      "message": "Vous n’avez pas les autorisations nécessaires pour accéder à cette ressource.",
+      "details": "Détails:",
+      "button": {
+        "dashboard": "Retour au tableau de bord",
+        "retry": "Ressayer"
+      },
+      "causes": {
+        "keycloak_inactive": {
+          "title": "Erreur d’authentification",
+          "message": "L’authentification Keycloak n’est pas disponible ou n’est pas correctement configurée",
+          "details": "La configuration Keycloak est manquante ou incomplète."
+        },
+        "insufficient_permissions": {
+          "title": "Autorisations insuffisantes",
+          "message": "Vos autorisations actuelles ne permettent pas l’accès à cette fonctionnalité."
+        },
+        "session_expired": {
+          "title": "Séance expirée",
+          "message": "Votre session a expiré. Veuillez vous reconnecter."
+        }
+      }
+    }
+  },
+  "menu": {
+    "textSize": {
+      "title": "Texte",
+      "textSize": "Taille du texte",
+      "small": "Petit",
+      "medium": "moyen",
+      "large": "Élevée"
+    },
+    "dashboard": {
+      "title": "Vue d’ensemble",
+      "welcome": "Bienvenue",
+      "greeting": "Bienvenue, {{name}}!",
+      "greetings": {
+        "morning": "Bonjour",
+        "afternoon": "Bonjour",
+        "evening": "Bonsoir"
+      },
+      "runningJobs": "Mandats en cours",
+      "recentJobs": "Récemment complété",
+      "myOfferten": "Mes offres",
+      "whatsNew": "Qu’est-ce qui est nouveau?",
+      "noRunningJobs": "Pas de commandes en cours",
+      "noRecentJobs": "Aucune commande récente",
+      "errorLoading": "Erreur de chargement du tableau de bord",
+      "errorMessage": "Impossible de charger les données du tableau de bord",
+      "retry": "Ressayer à nouveau",
+      "progress": "Progrès",
+      "errors": "Erreurs",
+      "timeAgo": {
+        "minutes": "avant {{count}} min",
+        "hours": "avant {{count}} heures",
+        "days": "avant {{count}} jour",
+        "daysPlural": "il y a {{count}} jours"
+      },
+      "jobTypes": {
+        "einladung": "Invitation DE",
+        "erinnerung": "Rappel DE",
+        "mahnung": "Rappel description d’entreprise",
+        "aktenentscheid": "Décision sur dossier",
+        "medikamentenrueckforderung": "récupération de médicaments",
+        "regress": "Recours"
+      },
+      "jobStatus": {
+        "running": "Fourche",
+        "completed": "Terminé",
+        "failed": "Echec",
+        "pending": "En attente"
+      },
+      "offertenStatus": {
+        "draft": "Projet",
+        "submitted": "Soumis",
+        "approved": "Approuvé",
+        "rejected": "Rejeté"
+      },
+      "changelog": {
+        "important": "important",
+        "categories": {
+          "feature": "fonctionnalité",
+          "improvement": "amélioration",
+          "bugfix": "dépannage",
+          "security": "Sécurité"
+        }
+      }
+    },
+    "fuv": {
+      "title": "Outil d’offres AFC",
+      "searchPerson": "Rechercher personne",
+      "searchBetrieb": "Rechercher entreprise",
+      "searchOfferte": "Rechercher une offre"
+    },
+    "vt": {
+      "title": "Technique de l’assurance",
+      "decision": "Gestion de la décision sur dossier",
+      "bb": {
+        "title": "Mise à jour DE",
+        "einladung": "Invitation",
+        "erinnerung": "rappel",
+        "mahnung": "Rappel",
+        "aufgabe": "Tâche"
+      }
+    },
+    "inex": {
+      "title": "Encaissement/décaissement",
+      "medirueck": "Gestion de la récupération de médicaments",
+      "regress": "Évaluer les paiements PoCo pour recours"
+    },
+    "system": {
+      "title": "Système",
+      "manageSettings": "Afficher la table des contrôles",
+      "manageScheduler": "Gérer le planificateur",
+      "manageCodeTable": "Gérer la table des codes",
+      "managePermissions": "Gérer les autorisations"
+    }
+  },
+  "common": {
+    "partner": {
+      "boid": "BOID",
+      "user": "utilisateur",
+      "person": "Personne",
+      "svnr": "N° AS",
+      "suvanr": "N° Suva",
+      "partnernr": "N° de partenaire",
+      "uidNr": "N° IDE",
+      "name": "Nom",
+      "vorname": "Prénom",
+      "nachname": "Nom",
+      "geburtstag": "anniversaire",
+      "strasse": "Rue",
+      "hausnr": "N° de maison",
+      "plz": "NPA",
+      "ort": "Lieu",
+      "email": "E-mail",
+      "telefon": "téléphone",
+      "mobile": "Mobile",
+      "address": "Adresse",
+      "personalInfo": "Informations personnelles",
+      "details": "détails",
+      "audit": "audit",
+      "stufe": "Niveau",
+      "status": "statut",
+      "sustatus": "Statut I/D",
+      "suStatusClear": "Claire",
+      "suStatusUnclear": "Incertain",
+      "btCode": "Code BT",
+      "basisstufe": "Niveau de base",
+      "klasse": "classe",
+      "vertragsdauer": "durée de l’assurance",
+      "position": "Position dans l’entreprise",
+      "stellung": "position dans l’entreprise",
+      "stellungImBetrieb": "Situation dans l’entreprise",
+      "beschaeftigungsgrad": "taux d’emploi",
+      "betrieb": "Entreprise",
+      "betriebsteil": "Partie d’entreprise",
+      "bonitaet": "solvabilité"
+    },
+    "police": {
+      "vorhandeneOfferten": "Offres existantes",
+      "vorhandeneVertraege": "Contrats existants",
+      "offertenr": "N° de l’offre",
+      "vertragNr": "N° de contrat",
+      "erstellungsdatum": "date de création",
+      "ablaufdatum": "date de péremption",
+      "gueltigAb": "Valable à partir du",
+      "gueltigBis": "Valable jusqu’au",
+      "offerteGueltigBis": "Valable jusqu’au",
+      "dauer": "durée",
+      "dauerDesVertrages": "Durée du contrat",
+      "art": "Type",
+      "artDerOfferte": "Type d’offre"
+    },
+    "search": {
+      "title": "Recherche",
+      "reset": "Réinitialiser",
+      "recent": "Requêtes récentes",
+      "searchCriteria": "Critères de recherche",
+      "noRecentSearches": "Aucune recherche passée",
+      "results": "résultats de la recherche",
+      "noResults": "Aucun résultat trouvé",
+      "placeholder": "Saisir un terme de recherche",
+      "clearHistory": "Supprimer l’historique de recherche",
+      "back": "Retour à la recherche",
+      "loading": "Chargement…"
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "minLength": "Ce champ doit comporter au moins {{min}} caractères",
+      "maxLength": "Ce champ ne doit pas contenir plus de {{max}} caractères.",
+      "germanDate": "Veuillez entrer une date valide au format JJ.MM.AAAA.",
+      "atLeastNFields": "Veuillez remplir au moins {{n}} des champs suivants: {{fields}}.",
+      "atLeastOneFieldRequired": "Veuillez saisir au moins un des champs {{field1}}, {{field2}}, {{field3}} ou {{field4}}",
+      "nameMinLength": "Le champ {{field}} doit contenir au moins {{min}} caractères s’il est utilisé pour la recherche.",
+      "invalidInput": "Saisie invalide. Veuillez saisir un numéro de sinistre valide."
+    },
+    "table": {
+      "emptyMessage": "Aucun résultat trouvé.",
+      "showExampleTable": "Afficher un exemple de tableau",
+      "jobDetails": "détails job",
+      "summary": "résumé",
+      "itemName": "élément",
+      "status": "statut",
+      "startTime": "Heure de départ",
+      "endTime": "la fin des temps",
+      "duration": "durée",
+      "errorMessage": "Message d’erreur",
+      "processedBy": "Traité par"
+    },
+    "services": {
+      "crm": "CRM",
+      "syrius": "SYRIUS",
+      "idms": "Dossier électronique",
+      "crif": "CRIF",
+      "documents": "Documents"
+    },
+    "fileUpload": {
+      "title": "Téléchargement de fichier",
+      "subtitle": "Chargez les fichiers ici en cliquant ou en faisant glisser-déposer",
+      "supportedFileTypes": "Types de fichiers pris en charge: {{files}}"
+    },
+    "fileTypes": {
+      "title": "Types de fichiers",
+      "excel": "Fichier Excel",
+      "csv": "fichier CSV",
+      "pdf": "Fichier PDF"
+    },
+    "actions": {
+      "title": "Actions",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "close": "Fermer",
+      "externalServices": "Services externes",
+      "reset": "Réinitialiser",
+      "resetFilter": "Réinitialiser le filtre",
+      "export": "Exporter",
+      "exportAll": "Exporter tout",
+      "exportSelection": "Exporter la sélection",
+      "exportFiltered": "Exporter filtré",
+      "exportFile": "exporter{{file}}",
+      "exportErrnousEntries": "Exporter les entrées erronées",
+      "exportSuccessfullEntries": "Exporter les entrées réussies",
+      "import": "Importer",
+      "importFile": "importer{{file}}",
+      "showProcessedJobs": "Afficher les tâches traitées",
+      "showDetails": "Afficher détails",
+      "refresh": "Mise à jour",
+      "back": "Retour",
+      "next": "Suivant",
+      "downloadExample": "Télécharger un exemple de fichier"
+    },
+    "placeholders": {
+      "pleaseSelect": "Veuillez sélectionner…",
+      "search": "Rechercher…",
+      "enterText": "Saisir texte…"
+    },
+    "messages": {
+      "loadFailed": "Échec de la chargeuse",
+      "saveFailed": "Échec de l’enregistrement",
+      "deleteFailed": "Échec de la suppression",
+      "error": "Erreur",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "info": "Remarque"
+    },
+    "export": {
+      "all": "Exporter tout",
+      "selected": "Exporter les sélections",
+      "successful": "Exportation réussie",
+      "failed": "Exporter les échecs",
+      "running": "Exportation en cours",
+      "pending": "Exportation en attente"
+    },
+    "status": {
+      "runningJobs": "Traitements en cours",
+      "yes": "Oui",
+      "no": "Non",
+      "success": "Réussite",
+      "successful": "Réussite",
+      "failed": "Echec",
+      "running": "Fourche",
+      "pending": "En attente",
+      "processed": "Traité",
+      "all": "Tous",
+      "errors": "Erreurs",
+      "loading": "Chargement…"
+    },
+    "test": {
+      "badge": {
+        "title": "Fichiers de test",
+        "description": "Sélectionnez un fichier de test à injecter dans la page active:",
+        "noTestFiles": "Aucun fichier test disponible pour cette page."
+      }
+    },
+    "filter": {
+      "all": "Tous"
+    },
+    "error": {
+      "emptyFile": "Le fichier est vide ou illisible",
+      "noDataRows": "Le fichier ne contient pas de lignes de données",
+      "parseError": "Erreur de traitement du fichier: {{message}}",
+      "requiredColumns": "Colonnes manquantes requises: {{columns}}"
+    },
+    "completed": "Terminé",
+    "successful": "Réussite",
+    "running": "En cours",
+    "failed": "Erroné",
+    "pending": "En attente",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "language": {
+    "title": "Langue",
+    "german": "Allemand",
+    "english": "anglais",
+    "french": "français",
+    "italian": "italien"
+  },
+  "preferences": {
+    "profile": {
+      "title": "Profil",
+      "autoDarkMode": "mode sombre automatique",
+      "reset": {
+        "title": "Réinitialiser le profil",
+        "message": "Etes-vous sûr de vouloir réinitialiser votre profil? Cette action est irréversible.",
+        "success": "Profil réinitialisé avec succès."
+      }
+    },
+    "resetPreferences": {
+      "confirm": {
+        "message": "Etes-vous sûr de vouloir réinitialiser tous les paramètres? Cette action ne peut pas être annulée.",
+        "header": "Confirmer la réinitialisation"
+      },
+      "success": "Réinitialisation réussie des paramètres."
+    }
+  },
+  "bugReport": {
+    "title": "Signaler une erreur",
+    "descriptionLabel": "Veuillez décrire le problème rencontré",
+    "descriptionPlaceholder": "Saisir ici une description de l’erreur…",
+    "collectedInfoLabel": "Les informations suivantes sont automatiquement incluses dans le rapport",
+    "includeScreenshotLabel": "Insérer une capture d’écran de la page en cours",
+    "screenshotPreviewLabel": "Aperçu des captures d’écran",
+    "screenshotProhibitedTitle": "Capture d’écran désactivée",
+    "screenshotProhibitedMessage": "Les captures d’écran sont désactivées sur cette page pour protéger les informations sensibles.",
+    "noScreenshotAvailable": "Aucune capture d’écran n’a pu être créée pour cette page.",
+    "submitButton": "Envoyer le rapport",
+    "cancelButton": "Annuler",
+    "submitting": "Envoi en cours…",
+    "successSummary": "Rapport envoyé",
+    "successDetail": "Merci de votre feed-back!",
+    "errorSummary": "Échec de l’envoi",
+    "errorDetail": "Impossible d’envoyer le rapport d’erreur. Veuillez réessayer plus tard.",
+    "warnNoDescriptionSummary": "La description manque",
+    "warnNoDescriptionDetail": "Veuillez décrire l’erreur avant de l’envoyer.",
+    "missingDataError": "Les informations d’application requises pour le rapport de bogue sont manquantes."
+  },
+  "onboarding": {
+    "buttons": {
+      "next": "Suivant",
+      "previous": "Retour",
+      "finish": "Terminé",
+      "skip": "Saut d’excursion",
+      "start": "Démarrer la tournée",
+      "dontShowAgain": "Ne plus afficher"
+    },
+    "initialDialog": {
+      "title": "Bienvenue dans le nouvel outil KPM!",
+      "content": "Voulez-vous faire un tour rapide pour découvrir les nouvelles fonctionnalités?"
+    },
+    "steps": {
+      "menuActions": {
+        "title": "Actions rapides",
+        "description": "Vous y trouverez des actions rapides telles que le changement de thème et de langue, le profil de l’utilisateur et un moyen de signaler des bogues."
+      },
+      "lightSwitch": {
+        "title": "Mode clair/obscurité",
+        "description": "Placez simplement entre le mode clair et le mode sombre."
+      },
+      "themeSwitch": {
+        "title": "Changement de sujet",
+        "description": "Changer les paramètres d’apparence de l’application."
+      },
+      "textSwitch": {
+        "title": "Choix de la langue et taille du texte",
+        "description": "Changer la langue de l’application et la taille du texte à tout moment via ce menu."
+      },
+      "userProfile": {
+        "title": "Profil de l’utilisateur",
+        "description": "Accédez aux paramètres et préférences du profil ici."
+      },
+      "bugReport": {
+        "title": "Signaler une erreur",
+        "description": "Vous avez rencontré un problème? Utilisez ce bouton pour signaler des bogues et nous aider à améliorer l’application."
+      }
+    }
+  },
+  "fuv": {
+    "common": {
+      "vorhandeneOfferten": "Offres existantes",
+      "vorhandeneVertraege": "Contrats existants",
+      "offerteErstellen": "Créer offre"
+    },
+    "person": {
+      "searchTitle": "Rechercher une personne",
+      "detailTitle": "Détails pour {{person}}"
+    },
+    "betrieb": {
+      "searchTitle": "Rechercher entreprise",
+      "detailTitle": "Détails pour {{entreprise}}"
+    },
+    "offerte": {
+      "title": "Offre",
+      "detail": {
+        "title": "Offre {{identifier}}",
+        "fields": {
+          "offertenr": "N° de l’offre",
+          "name": "Nom",
+          "status": "statut",
+          "erstellungsdatum": "date de création",
+          "gueltigAb": "Valable à partir du",
+          "gueltigBis": "Valable jusqu’au",
+          "total": "Total"
+        }
+      }
+    },
+    "searchOfferte": {
+      "validation": {
+        "atLeastOneFieldRequired": "Veuillez saisir au moins un des champs de recherche."
+      },
+      "table": {
+        "betrieb": "Entreprise",
+        "offertenr": "N° de l’offre",
+        "user": "utilisateur",
+        "status": "statut",
+        "artDerOfferte": "Type d’offre",
+        "gueltigAb": "Valable à partir du",
+        "gueltigBis": "Valable jusqu’au",
+        "dauerDesVertrages": "durée de l’assurance",
+        "stellungImBetrieb": "Situation dans l’entreprise",
+        "beschaeftigungsgrad": "taux d’emploi",
+        "klasse": "classe",
+        "basisstufe": "Niveau de base",
+        "person": "Personne",
+        "noResults": "Aucune offre trouvée."
+      }
+    },
+    "police": {
+      "title": "Offre et proposition pour l’assurance des chefs d’entreprise",
+      "description": "Couverture d’assurance contre les accidents professionnels et non professionnels ainsi que les maladies professionnelles selon la loi fédérale sur l’assurance-accidents (LAA)",
+      "banners": {
+        "policiert": {
+          "title": "L'offre a été policée",
+          "description": "L'offre a été policée et est en lecture seule. Aucune modification supplémentaire n'est possible."
+        },
+        "rejected": {
+          "title": "Offre refusée",
+          "description": "Cette offre a été refusée et est en lecture seule. Aucune modification supplémentaire n'est possible."
+        }
+      },
+      "tooltips": {
+        "offertantrag": {
+          "vttRejected": "La demande d'offre ne peut pas être imprimée car l'offre a été refusée par le VTT.",
+          "checklistMissing": "La demande d'offre ne peut pas être imprimée car la liste de contrôle n'est pas entièrement remplie."
+        }
+      },
+      "messages": {
+        "offerteNotFound": "Offre {{offertenr}} introuvable",
+        "loadOfferteError": "Erreur lors du chargement de l'offre",
+        "saveSuccess": "Modifications enregistrées",
+        "saveError": "Erreur lors de l'enregistrement des modifications",
+        "saveOfferteError": "Erreur lors de l'enregistrement de l'offre",
+        "noOfferte": "Aucune offre disponible",
+        "mustSaveFirst": "L'offre doit d'abord être enregistrée",
+        "tezuMissing": "L'affectation technique n'a pas encore été calculée. Veuillez aller à l'étape 4 (Variantes) et cliquer sur « Calculer ».",
+        "printOfferteSuccess": "Offre imprimée avec succès et document OPUS ouvert",
+        "printOffertantragSuccess": "Demande d'offre imprimée avec succès et document OPUS ouvert",
+        "taskCreated": "Tâche créée",
+        "signatureValidationFailed": "L'offre ne peut pas être signée. Le contrôle de complétude présente encore des points ouverts."
+      },
+      "steps": {
+        "checkliste": "Liste de contrôle",
+        "person": "Personne assurée",
+        "versichertePerson": "Personne assurée",
+        "betrieb": "Entreprise AFC",
+        "fuvBetrieb": "Entreprise AFC",
+        "taetigkeit": "activité",
+        "varianten": "variantes",
+        "antragsfragen": "questions d’admission",
+        "abschluss": "Conclusion",
+        "nachbearbeitung": "Traitement ultérieur"
+      },
+      "actions": {
+        "next": "Suivant",
+        "back": "Retour",
+        "close": "Fermer",
+        "search": "rechercher",
+        "refresh": "Mise à jour",
+        "print": "Imprimer",
+        "save": "Enregistrer"
+      },
+      "tasks": {
+        "createVttTask": "Créer une tâche de VTT",
+        "editTask": "Traiter la tâche",
+        "createTask": "Créer une nouvelle tâche",
+        "updateTask": "Mettre à jour la tâche",
+        "taskType": "Type de tâche",
+        "openInSyrius": "Ouvrir tâche dans Syrius"
+      },
+      "errors": {
+        "offerteAlreadyExists": "Il existe déjà une offre pour cette combinaison de personne et d’entreprise. Offre(s) existante(s): {{offertenr}} Veuillez utiliser l’offre existante ou sélectionner une autre personne/entreprise.",
+        "createFailed": "Erreur lors de la création de l’offre. Veuillez réessayer."
+      },
+      "duplicateDialog": {
+        "title": "Offre déjà disponible",
+        "message": "Il existe déjà une offre pour cette combinaison de personne et d’entreprise. Veuillez utiliser l’offre existante ou sélectionner une autre personne ou une autre entreprise.",
+        "existingOfferte": "Offre(s) existante(s)"
+      },
+      "buttons": {
+        "checkliste": "Liste de contrôle",
+        "checklisteOpen": "Saisir/Modifier la liste de contrôle",
+        "schliessen": "Fermer",
+        "unverbindlicheOfferteDrucken": "Imprimer une offre sans engagement",
+        "offertantragDrucken": "Imprimer l’offre et proposition",
+        "verlaengerungsofferteDrucken": "Imprimer offre de prolongation",
+        "offerteAblehnen": "Refuser une offre",
+        "crm": "CRM",
+        "syrius": "SYRIUS",
+        "eDossier": "Dossier électronique"
+      },
+      "versichertePerson": {
+        "searchPerson": "Rechercher une personne",
+        "searchDialogHeader": "Rechercher une personne",
+        "geschlecht": "Sexe",
+        "zivilstand": "État civil",
+        "plzOrt": "NPA, Lieu"
+      },
+      "antragsfragen": {
+        "header": "Questions relatives à la proposition",
+        "buttons": {
+          "viewQuestions": "Voir les questions",
+          "vttBeurteilung": "Appréciation VTT",
+          "vttBeurteilungTooltip": "Afficher une tâche de VTT",
+          "confirmVttTask": "Oui",
+          "cancelVttTask": "Non"
+        },
+        "vttDialog": {
+          "title": "Créer une tâche VTT",
+          "message": "Trois questions ou plus ont obtenu la réponse «Oui». Avant de pouvoir établir une police, l’offre doit être examinée par un expert VTT. Veuillez ensuite faire signer l’offre et proposition par le client. Faut-il créer une tâche pour VTT?",
+          "beurteilungsart": "Type d'évaluation",
+          "bemerkungZurBeurteilung": "Remarque sur l'évaluation",
+          "bemerkungPlaceholder": "Remarques sur l'évaluation..."
+        },
+        "vttBeurteilungDialog": {
+          "tab1": "Appréciation VTT",
+          "tab2": "Tâche détails"
+        },
+        "status": {
+          "questionsReady": "Questions d’admission prêtes",
+          "lastChanged": "Modifié le"
+        },
+        "loading": {
+          "permissions": "Chargement des autorisations...",
+          "questions": "Chargement des questions de demande...",
+          "pleaseWait": "Veuillez patienter un instant"
+        },
+        "summary": {
+          "title": "Résumé",
+          "recordedOn": "Enregistré le",
+          "changedOn": "Modifié le",
+          "answered": "Répondu",
+          "open": "Ouvert",
+          "approved": "Approuvé",
+          "notApproved": "Non approuvé",
+          "createdExpectingAssessment": "Créé: En attente d'évaluation"
+        },
+        "labels": {
+          "ifYesWhich": "Si oui, lesquels?",
+          "warenSieDeshalbInBehandlung": "Avez-vous été en traitement pour cette raison?",
+          "digitallySigned": "Signé numériquement",
+          "signedOn": "Signé le",
+          "taskForVtt": "Tâche pour VTT"
+        },
+        "placeholders": {
+          "pleaseProvideDetails": "Veuillez fournir des détails..."
+        },
+        "validation": {
+          "fillRequired": "Veuillez remplir tous les champs obligatoires",
+          "answerAll": "Veuillez répondre à toutes les questions. {{count}} question(s) encore ouverte(s).",
+          "toastTitle": "Erreur de validation",
+          "fillDetails": "Veuillez remplir toutes les informations requises."
+        },
+        "permissions": {
+          "noPermission": "Aucune autorisation",
+          "noAccessMessage": "Vous n'avez pas l'autorisation de visualiser ou de modifier les questions de demande.",
+          "readOnly": "Mode lecture",
+          "readOnlyMessage": "Les questions ne peuvent être que consultées"
+        },
+        "aufgabe": {
+          "inSyrius": "Tâche dans Syrius",
+          "beschreibung": "Description",
+          "status": "Statut",
+          "organisationseinheit": "Unité organisationnelle",
+          "zugewiesenAn": "Assigné à",
+          "noDetails": "Aucun détail de tâche disponible"
+        }
+      },
+      "fuvBetrieb": {
+        "searchBetrieb": "Rechercher une entreprise",
+        "searchDialogHeader": "Rechercher une entreprise",
+        "name1": "Nom1",
+        "name2": "Nom2",
+        "plzOrt": "NPA, Lieu"
+      },
+      "abschluss": {
+        "header": "Fin",
+        "vttRejection": {
+          "title": "L’offre a été refusée par VTT",
+          "message": "En raison du refus VTT, l’offre ne peut pas être signée."
+        },
+        "signatureInvalidation": {
+          "title": "La signature est invalide",
+          "message": "La signature est invalide en raison de modifications apportées à l’offre. Veuillez signer à nouveau."
+        },
+        "validationError": {
+          "message": "L’offre ne peut pas être signée. Contrôle d’intégralité à points en suspens"
+        },
+        "completenessCheck": {
+          "title": "contrôle d’intégralité"
+        },
+        "signature": {
+          "watermark": "Votre signature ici",
+          "digitalSigned": "Signature numérique",
+          "physicalSigned": "Signé physiquement",
+          "signedOn": "Signé le",
+          "discard": "Annuler signature",
+          "resetDigital": "Réinitialiser signature numérique",
+          "resetPhysical": "Réinitialiser la signature physique",
+          "physicalNotAllowed": "La signature physique ne peut pas être sélectionnée car une signature numérique existe déjà ou est en cours de dessin."
+        },
+        "avb": {
+          "confirmation": "Par ma signature, je certifie avoir lu et compris les CGA et que les indications sont exactes.",
+          "physicalReturn": "L’offre AFC, le questionnaire d’admission rempli (sauf en cas de prolongation) a été signée et retournée sous forme papier."
+        },
+        "validation": {
+          "checklisteComplete": "La liste de contrôle est complète et valide.",
+          "checklisteIncomplete": "La liste de contrôle n’a pas encore été traitée de manière complète.",
+          "antragsFragenVttApproved": "Les questions d’admission ont été examinées par VTT.\n\nLa tâche a été éditée.",
+          "antragsFragenVttPending": "VTT doit encore examiner les questions d’admission.\n\nLa tâche a été créée.",
+          "antragsFragenVttNotCreated": "VTT doit encore examiner le questionnaire d’admission.\n\nLa tâche doit être créée.",
+          "antragsFragenOk": "Les questions d’admission sont en ordre (aucun examen VTT nécessaire)."
+        }
+      },
+      "nachbearbeitung": {
+        "header": "Traitement ultérieur",
+        "anspruchsberechtigte": "bénéficiaires",
+        "buttons": {
+          "offertePolicieren": "Établir une offre"
+        },
+        "offerteAblehnenHeader": "Refuser une offre",
+        "waehlenSieEinePerson": "Choisissez une personne…",
+        "waehlenSieEinenGrund": "Choisissez une raison…",
+        "kundengeschenkAbgegeben": "Cadeau pour client remis",
+        "geschenkbegriffArtikel": "Notion de cadeau/article",
+        "internerVermittlerVerkaeufer": "intermédiaire interne – vendeur",
+        "internerVermittlerBeteiligter": "intermédiaire interne – Partie impliquée",
+        "externerVermittler": "intermédiaire externe",
+        "ablehnungsgrund": "Motif de rejet",
+        "info": {
+          "title": "Remarque:",
+          "message": "Les champs ne pourront être traités que lorsque l’offre et proposition AFC aura été signée numériquement ou retournée sous forme physique lors de l’étape «Conclusion». Le motif du rejet peut toujours être saisi."
+        },
+        "validation": {
+          "vermittlerRequired": "Il faut toujours indiquer avec précision un vendeur d’intermédiaire interne."
+        },
+        "radioOptions": {
+          "ja": "oui",
+          "nein": "Non"
+        },
+        "labels": {
+          "offerteAbschliessen": "Finaliser l'offre"
+        },
+        "placeholders": {
+          "vermittlerWaehlen": "Sélectionner un courtier..."
+        }
+      },
+      "taetigkeit": {
+        "avb": "CGA",
+        "taetigkeitenLabel": "Activités",
+        "taetigkeitenNote": "Les pourcentages combinés doivent correspondre exactement à 100 %.",
+        "corrections": {
+          "title": "Remarque",
+          "dateCorrected": "Le contrat valable jusqu’au a été corrigé:",
+          "dateCorrectedDetail": "La date de fin a été adaptée automatiquement pour garantir que le contrat couvre au moins le nombre d’années entières indiqué et qu’il se termine à la fin de l’année (le 31 décembre).",
+          "previousValue": "Valeur précédente: {{value}}",
+          "avbUpdated": "CGA mis à jour:",
+          "avbUpdatedDetail": "Les conditions générales d’assurance (CGA) ont été automatiquement mises à jour à la dernière version.",
+          "previousVersion": "Version précédente: {{version}}"
+        },
+        "fields": {
+          "vertragGueltigAb": "Contrat valable à partir du",
+          "vertragGueltigBis": "Contrat valable jusqu’au",
+          "vertragsdauer": "durée du contrat",
+          "verkaufskanal": "canal de vente",
+          "taetigkeitsbeschreibung": "Description de l’activité",
+          "stellungImBetrieb": "Situation dans l’entreprise",
+          "arbeitspensum": "Taux d’occupation",
+          "taetigkeiten": "activités",
+          "selbststaendigSeit": "Depuis quand êtes-vous indépendant?",
+          "anzahlMitarbeiter": "Nombre de collaborateurs sans propriétaire",
+          "stellenprozente": "Pourcentages de poste sans propriétaire"
+        },
+        "placeholders": {
+          "datumWaehlen": "Sélectionner la date…",
+          "vertragsdauerWaehlen": "Sélectionner la durée de l’assurance…",
+          "verkaufskanalWaehlen": "Choisir le canal de vente…",
+          "taetigkeitsbeschreibungErgaenzen": "Compléter la description de l’activité…",
+          "stellungWaehlen": "Sélectionner la position dans l’entreprise…",
+          "arbeitspensumWaehlen": "Sélectionner le taux d’occupation…",
+          "taetigkeitSuchen": "Rechercher et sélectionner l’activité…",
+          "anzahlMitarbeiterWaehlen": "Sélectionner le nombre de collaborateurs…",
+          "stellenprozenteErgaenzen": "Compléter le pourcentage de poste…"
+        },
+        "validation": {
+          "requiredFields": "Tous les champs obligatoires doivent être remplis avant de pouvoir continuer:",
+          "minWords": "Au moins 3 mots sont requis (actuellement: {{current}} de {{required}})",
+          "taetigkeitRequired": "L’activité est obligatoire",
+          "taetigkeitenRequired": "Veuillez sélectionner au moins une activité",
+          "taetigkeiten100Percent": "Les activités combinées doivent correspondre exactement à 100 %",
+          "taetigkeitsbeschreibungInvalid": "La description de l'activité n'est pas valide",
+          "vertragsdauerRequired": "La durée du contrat est obligatoire",
+          "verkaufskanalRequired": "Le canal de vente est obligatoire",
+          "stellungImBetriebRequired": "Le poste dans l'entreprise est requis",
+          "arbeitspensumRequired": "Le taux d'activité est requis",
+          "selbststaendigSeitRequired": "Depuis quand êtes-vous indépendant est requis",
+          "anzahlMitarbeiterRequired": "Le nombre d'employés est requis",
+          "stellenprozenteRequired": "Les pourcentages de poste sans propriétaire sont requis",
+          "stellenprozenteMustBeNumber": "Les pourcentages de poste doivent être un nombre",
+          "stellenprozenteNotNegative": "Les pourcentages de poste ne doivent pas être négatifs",
+          "stellenprozenteMaxValue": "Les pourcentages de poste ne doivent pas dépasser 9999",
+          "vertragGueltigAbRequired": "Le contrat valable à partir de est requis",
+          "vertragGueltigAbNotInPast": "Le contrat valable à partir de ne doit pas être dans le passé",
+          "vertragGueltigBisRequired": "Le contrat valable jusqu'à est requis",
+          "vertragGueltigBisMustBeAfter": "Le contrat valable jusqu'à doit être après le contrat valable à partir de",
+          "vertragMustCoverYears": "Le contrat doit couvrir au moins 1, 2, 3 ou 4 années complètes et se terminer en fin d'année (31.12.)",
+          "taetigkeitenSumMust100": "La somme de tous les pourcentages d'activité doit être de 100%",
+          "prozentMustBeNumber": "Le pourcentage doit être un nombre",
+          "prozentMinValue": "Le pourcentage doit être au moins 0",
+          "prozentMaxValue": "Le pourcentage ne doit pas dépasser 100"
+        },
+        "tooltips": {
+          "setTodayDate": "Définir la date d'aujourd'hui"
+        }
+      },
+      "varianten": {
+        "header": "variantes",
+        "loading": {
+          "title": "Attribution technique calculée…",
+          "message": "S’il vous plaît attendez un moment"
+        },
+        "error": {
+          "calculationTitle": "Erreurs de calcul",
+          "retryButton": "Ressayer",
+          "noTaetigkeitData": "Aucune donnée d'activité disponible. Veuillez d'abord remplir l'étape 3.",
+          "tezuCalculationFailed": "L'affectation technique n'a pas pu être calculée.",
+          "detailPrefix": "Erreur :"
+        },
+        "technischeZuweisung": {
+          "title": "Attribution technique détails",
+          "table": {
+            "zuweisungstyp": "Type d’attribution",
+            "anteil": "Pourcentage",
+            "klasse": "classe",
+            "bezeichnungKlasse": "désignation de la classe",
+            "unterklassenteil": "Partie de sous-classe",
+            "bezeichnungUnterklassenteil": "Désignation de la partie de sous-classe"
+          }
+        },
+        "grundlagen": {
+          "title": "Bases pour le calcul des primes",
+          "agenturkompetenz": "Compétence des agences",
+          "tariftyp": "type de tarif",
+          "berechnungsart": "Mode de calcul",
+          "tarifmodell": "modèle tarifaire"
+        },
+        "variante": {
+          "title": "Variante",
+          "verdienst": "Gain annuel assuré",
+          "verdienstPlaceholder": "Saisir le montant…",
+          "taggeldAb": "Indemnité journalière dès le",
+          "taggeldAbPlaceholder": "Sélectionner l’indemnité journalière à partir du…",
+          "praemie": "Prime",
+          "praemieProMonat": "Prime par mois"
+        },
+        "praemienzahlung": {
+          "label": "Paiement des primes",
+          "placeholder": "Choisir le mode de paiement…"
+        },
+        "validation": {
+          "requiredFields": "Veuillez remplir tous les champs obligatoires:",
+          "varianteMissing": "Il faut sélectionner la variante",
+          "verdienstMissing": "Gain annuel assuré pour la variante {{variant}}",
+          "taggeldMissing": "L’indemnité journalière dès le pour la variante {{variant}} doit être sélectionnée",
+          "praemienzahlungMissing": "Il faut impérativement sélectionner le paiement des primes",
+          "checklisteRequired": "Veuillez d’abord établir une liste de contrôle. En l’absence de liste de contrôle, seul un paiement annuel est possible.",
+          "errors": {
+            "familyMemberMin": "{{label}} ({{percentage}} %) doivent assurer au minimum {{minValue}} CHF",
+            "ownerMin": "{{label}} ({{percentage}} %) doivent assurer au minimum {{minValue}} CHF",
+            "maxValue": "Le gain assuré maximal est de CHF {{maxValue}}",
+            "negativeValue": "Le gain annuel assuré ne doit pas être négatif.",
+            "generic": "Échec de la validation. Veuillez vérifier le gain assuré."
+          },
+          "defaults": {
+            "familyMemberLabel": "Membres de la famille collaborateurs",
+            "ownerLabel": "Propriétaires / exploitants et travailleurs partiels"
+          },
+          "warnings": {
+            "invalidZahlungsweise": "Le mode de paiement \"{{value}}\" a été supprimé. Veuillez choisir un mode valable (annuel, semestriel ou trimestriel)."
+          }
+        },
+        "labels": {
+          "varianteA": "Variante A",
+          "varianteB": "Variante B",
+          "varianteC": "Variante C",
+          "jahresverdienst": "Revenu annuel",
+          "monatsverdienst": "Revenu mensuel",
+          "taggeldAb": "Indemnité journalière à partir de",
+          "rabatt": "Rabais",
+          "taggeldProJahr": "Indemnité journalière par an",
+          "taggeldProMonat": "Indemnité journalière par mois",
+          "invalidenrenteProJahr": "Rente d'invalidité par an",
+          "invalidenrenteProMonat": "Rente d'invalidité par mois",
+          "invalidenrenteHinweis": "en cas d’invalidité à 100 % incl. rente AI",
+          "praemienUebersicht": "Aperçu des primes",
+          "jahresbruttoprämie": "Prime annuelle brute",
+          "jahrespraemie": "Prime annuelle",
+          "monatspraemie": "Prime mensuelle",
+          "begleitschreiben": "Lettre d'accompagnement",
+          "istBegleitschreibenVorhanden": "Y a-t-il une lettre d'accompagnement?",
+          "geldleistungen": "Prestations en espèces",
+          "zahlungsadresse": "Adresse de paiement",
+          "ibanNr": "N° IBAN",
+          "bankLookupInProgress": "Recherche de la banque...",
+          "nameGeldinstitut": "Nom de l'établissement financier",
+          "kontoinhaber": "Titulaire du compte",
+          "wirdAutomatischAusgefuellt": "sera rempli automatiquement",
+          "praemiensatzBrutto": "Taux de prime (brut)",
+          "invalidenrenteKuerzung": "La rente d'invalidité peut être réduite à l'atteinte de l'âge ordinaire de la retraite. La réduction dépend de l'âge au moment de l'accident et du degré d'invalidité. En cas d'accident après l'atteinte de l'âge ordinaire de la retraite, il n'y a pas droit à une rente d'invalidité.",
+          "minimalpraemie": "La prime minimale est de Fr. 540.00 par an.",
+          "checklisteZahlungsweise": "En l'absence de liste de contrôle, seul le mode de paiement annuel est possible"
+        },
+        "placeholders": {
+          "taggeldAbWaehlen": "Sélectionner l'indemnité journalière à partir de..."
+        },
+        "tooltips": {
+          "copyToVariants": "Copier la valeur vers les variantes B & C"
+        },
+        "iban": {
+          "errors": {
+            "invalidFormat": "Format IBAN non valide. L’IBAN doit commencer par un code pays à deux lettres (p. ex. CH13 0077 8180 2388 9200).",
+            "noBankFound": "Aucune banque trouvée pour cet IBAN",
+            "lookupFailed": "Erreur lors du chargement des données bancaires"
+          }
+        },
+        "zahlungsweise": {
+          "jaehrlich": "annuel",
+          "halbjaehrlich": "semestriel",
+          "vierteljährlich": "trimestriel"
+        },
+        "zahlungsweiseLabels": {
+          "jaehrlich": "annuel",
+          "halbjaehrlich": "semestriel (+ 0,25 %)",
+          "vierteljaehrlich": "trimestriel (+ 0,375 %)"
+        }
+      },
+      "checkliste": {
+        "title": "Liste de contrôle",
+        "gueltigAb": "Valable à partir du",
+        "alterVersicherten": "Age de l’assuré au début du contrat",
+        "dialogHeader": "Saisir et modifier la liste de contrôle",
+        "rendement": {
+          "title": "Rendement",
+          "description": "Lors de l’établissement de la liste de contrôle, les données d’accident potentielles sont lues depuis Syrius mais peuvent être écrasées",
+          "mehrAlsEinUnfall": "Plus qu’un accident au cours des cinq dernières années",
+          "liegenLaufendeUnfaelleVor": "Y a-t-il des accidents en cours?"
+        },
+        "bonitaetCrif": {
+          "title": "Solvabilité de CRIF",
+          "selectPlaceholder": "Choisir la solvabilité",
+          "callCrif": "Appeler CRIF",
+          "fetchCrifData": "Récupération automatique des données CRIF"
+        },
+        "errors": {
+          "bonitaetOptionsLoadFailed": "Impossible de charger les options de solvabilité",
+          "checklisteLoadFailed": "Échec du chargement de la liste de contrôle.",
+          "accidentDataLoadFailed": "Impossible de charger les données d’accident"
+        },
+        "audit": {
+          "title": "Audit",
+          "auditFlagCrifVorhanden": "Audit indicateur CRIF disponible"
+        },
+        "loading": {
+          "title": "Chargement des données",
+          "message": "Les données de la liste de contrôle sont en cours de traitement...",
+          "pleaseWait": "Veuillez patienter un instant."
+        },
+        "buttons": {
+          "save": "Enregistrer",
+          "createVttTask": "Créer une tâche VTT",
+          "callCrif": "Appeler CRIF",
+          "fetchCrifData": "Récupérer automatiquement les données CRIF",
+          "downloadCrifPdf": "Télécharger le rapport CRIF en PDF",
+          "openCrifWeb": "Ouvrir le rapport CRIF sur le web"
+        },
+        "messages": {
+          "saveBefore": "Veuillez d'abord enregistrer la liste de contrôle",
+          "crifAvailability": "Il peut s'écouler jusqu'à une minute avant que les rapports web et PDF ne soient disponibles dans le portail CRIF."
+        },
+        "sections": {
+          "rendement": "Rendement"
+        }
+      }
+    },
+    "vertrag": {
+      "title": "Contrat",
+      "detail": {
+        "title": "Contrat {{identifier}}",
+        "fields": {
+          "vertragNr": "N° de contrat",
+          "betriebName": "Nom de l’entreprise",
+          "status": "statut",
+          "gueltigAb": "Valable à partir du",
+          "gueltigBis": "Valable jusqu’au"
+        }
+      }
+    }
+  },
+  "vt": {
+    "aktenentscheid": {
+      "title": "Gestion de la décision sur dossier",
+      "description": "Télécharger un fichier Excel afin d’établir une nouvelle décision sur dossier.",
+      "table": {
+        "row": "Ligne",
+        "btcode": "Code BT",
+        "experte": "Expert",
+        "bb_datum": "Date DE",
+        "aufgabe": "Tâche",
+        "errors": "Erreurs",
+        "status": "Statut"
+      }
+    },
+    "bb": {
+      "erinnerung": {
+        "title": "Gérer les rappels",
+        "description": "Télécharger un fichier Excel afin de créer un nouveau rappel pour la description d’entreprise."
+      },
+      "einladung": {
+        "title": "Gérer les invitations",
+        "description": "Télécharger un fichier Excel afin d’établir une nouvelle invitation pour la description d’entreprise.",
+        "partnernr": "N° de partenaire",
+        "bb_datum": "Date DE",
+        "fallnummer": "Numéro de cas",
+        "versichertennummer": "numéro d’assuré",
+        "table": {
+          "row": "Ligne",
+          "partnernr": "N° de partenaire",
+          "partner_boid": "Partenaire BO-ID",
+          "btcode": "Code BT",
+          "dokbestellid": "ID de commande de document",
+          "message": "Message",
+          "errors": "Erreurs",
+          "status": "Statut"
+        },
+        "status": {
+          "neu": "Nouveau",
+          "verarbeitet": "Traité",
+          "pending": "En attente",
+          "processing": "Traitement en cours"
+        },
+        "errors": {
+          "upload_failed": "Erreur lors du téléchargement du fichier",
+          "processing_failed": "Erreur de traitement du fichier",
+          "job_not_found": "Mandat introuvable",
+          "details_load_failed": "Erreur de chargement des détails de la tâche",
+          "invalid_file": "Fichier invalide. Veuillez télécharger un fichier Excel.",
+          "FILE_UPLOAD_FAILED": "Erreur lors du téléchargement du fichier",
+          "PROCESSING_TRIGGER_FAILED": "Erreur lors du démarrage du traitement",
+          "STATUS_FETCH_FAILED": "Erreur lors de la récupération du statut",
+          "JOB_NOT_FOUND": "Mandat introuvable",
+          "DETAILS_LOAD_FAILED": "Erreur de charge des détails de la commande",
+          "JOB_CREATION_FAILED": "Erreur lors de la création de la tâche",
+          "EXCEL_PARSE_FAILED": "Erreur lors du traitement du fichier Excel"
+        },
+        "messages": {
+          "upload_success": "Fichier téléchargé avec succès",
+          "processing_started": "Traitement démarré",
+          "processing_complete": "Traitement terminé"
+        }
+      },
+      "mahnung": {
+        "title": "Gestion des rappels",
+        "description": "Télécharger un fichier Excel afin d’établir un nouveau rappel pour la description d’entreprise."
+      },
+      "aufgabe": {
+        "title": "Gérer la tâche",
+        "description": "Télécharger un fichier Excel afin de créer une nouvelle tâche pour le généraliste primes pour la description d’entreprise."
+      },
+      "jobs": {
+        "noRunningJobs": "Pas de traitement en cours",
+        "noRunningJobsDesc": "Toutes les commandes sont actuellement terminées",
+        "started": "Commencé le",
+        "estimatedCompletion": "Terminé aux alentours de",
+        "showCompleted": "Afficher les tâches terminées",
+        "hideCompleted": "Masquer les tâches terminées",
+        "noCompletedJobs": "Aucune tâche terminée disponible",
+        "emailNotification": "Vous recevez une notification par e-mail lorsqu’une commande est terminée",
+        "legend": {
+          "successful": "Entrées terminées avec succès",
+          "running": "Entrées en cours de traitement",
+          "failed": "Entrées échouées",
+          "pending": "Entrées non encore traitées",
+          "description": "Légende du statut"
+        },
+        "loadMoreCompleted": "Charger d’autres tâches terminées"
+      }
+    }
+  },
+  "inex": {
+    "medirueck": {
+      "title": "Gestion de la récupération de médicaments",
+      "description": "Télécharger un fichier Excel pour créer une nouvelle demande de remboursement de médicament",
+      "table": {
+        "row": "Ligne",
+        "falldossier": "Dossier cas",
+        "rechnungstyp": "Type de facture",
+        "behandlungsbeginn": "début du traitement",
+        "behandlungsende": "fin du traitement",
+        "rueckzahler": "retours-payeur",
+        "rechnungsbetrag": "montant de la facture",
+        "kommentar": "commentaire",
+        "message": "Message",
+        "errors": "Erreurs",
+        "status": "Statut"
+      },
+      "status": {
+        "neu": "Nouveau",
+        "verarbeitet": "Traité",
+        "pending": "En attente",
+        "processing": "Traitement en cours"
+      },
+      "errors": {
+        "upload_failed": "Erreur lors du téléchargement du fichier",
+        "processing_failed": "Erreur de traitement du fichier",
+        "job_not_found": "Mandat introuvable",
+        "details_load_failed": "Erreur de chargement des détails de la tâche",
+        "invalid_file": "Fichier invalide. Veuillez télécharger un fichier Excel.",
+        "FILE_UPLOAD_FAILED": "Erreur lors du téléchargement du fichier",
+        "PROCESSING_TRIGGER_FAILED": "Erreur lors du démarrage du traitement",
+        "STATUS_FETCH_FAILED": "Erreur lors de la récupération du statut",
+        "JOB_NOT_FOUND": "Mandat introuvable",
+        "DETAILS_LOAD_FAILED": "Erreur de charge des détails de la commande",
+        "JOB_CREATION_FAILED": "Erreur lors de la création de la tâche",
+        "EXCEL_PARSE_FAILED": "Erreur lors du traitement du fichier Excel"
+      },
+      "messages": {
+        "upload_success": "Fichier téléchargé avec succès",
+        "processing_started": "Traitement démarré",
+        "processing_complete": "Traitement terminé"
+      },
+      "jobs": {
+        "noRunningJobs": "Pas de traitement en cours",
+        "noRunningJobsDesc": "Toutes les commandes sont actuellement terminées",
+        "started": "Commencé le",
+        "estimatedCompletion": "Terminé aux alentours de",
+        "showCompleted": "Afficher les tâches terminées",
+        "hideCompleted": "Masquer les tâches terminées",
+        "noCompletedJobs": "Aucune tâche terminée disponible",
+        "emailNotification": "Vous recevez une notification par e-mail lorsqu’une commande est terminée",
+        "legend": {
+          "successful": "Entrées terminées avec succès",
+          "running": "Entrées en cours de traitement",
+          "failed": "Entrées échouées",
+          "pending": "Entrées non encore traitées",
+          "description": "Légende du statut"
+        },
+        "loadMoreCompleted": "Charger d’autres tâches terminées"
+      }
+    },
+    "regress": {
+      "title": "Évaluer les paiements des PoCo pour recours",
+      "description": "Recherche d’un numéro de sinistre en vue de l’évaluation des paiements des PoCo pour recours",
+      "results": "résultats de la recherche",
+      "schadennr": "N° de sinistre",
+      "vorfall": "Incident",
+      "gvorfall": "Incident",
+      "rechnungsnummer": "numéro de facture",
+      "rechnungsnr": "N° de facture",
+      "rechnungsbetrag": "montant de la facture",
+      "urbetrag": "Montant (CHF)",
+      "partnernummer": "Numéro de partenaire",
+      "name": "Nom",
+      "zahlernr": "N° de payeur",
+      "transaktionsnriso": "N° de transaction ISO",
+      "meldungsidiso": "ID de message ISO",
+      "metabo": "Meta-BO-ID",
+      "paymentid": "ID de paiement",
+      "meldungsid": "identifiant du message",
+      "erstelldatum": "Date de création",
+      "zahlungsdatum": "Date de paiement",
+      "openSelectionInSyrius": "Ouvrir la sélection dans Syrius",
+      "boid": "BO-ID",
+      "validation": {
+        "schadenNrRequired": "N° de sinistre nécessaire.",
+        "schadenNrFormat": "Format n° de sinistre invalide. Attendu: XX.XXXXX.XX.X (par ex. 25.12340.20.5)"
+      },
+      "errors": {
+        "notFound": "Aucune entrée trouvée pour ce numéro de sinistre.",
+        "loadFailed": "Erreur lors du chargement des données relatives à un recours.",
+        "missingIdentifiers": "Veuillez indiquer le numéro de sinistre, l’ID BO ou le n° de partenaire."
+      }
+    }
+  },
+  "core": {
+    "backendErrorBanner": {
+      "title": "Dysfonctionnement du service",
+      "message": "Nous avons des difficultés techniques. Votre travail a été enregistré localement et sera synchronisé une fois le service rétabli. Veuillez réessayer plus tard.",
+      "close": "Fermer notification"
+    },
+    "interceptors": {
+      "error": {
+        "timeout": {
+          "summary": "Avertissement",
+          "detail": "Le backend ne répond pas. Vos modifications ont été enregistrées localement."
+        },
+        "serverError": {
+          "summary": "Avertissement",
+          "detail": "Une erreur de serveur s’est produite, mais vos modifications ont été enregistrées localement."
+        },
+        "genericError": "Une erreur s’est produite. Veuillez réessayer plus tard."
+      }
+    }
+  },
+  "system": {
+    "main": "Système",
+    "manageSettings": "Afficher la table des contrôles",
+    "manageScheduler": "Gérer le planificateur",
+    "manageCodeTable": "Gérer la table des codes",
+    "managePermissions": "Gérer les autorisations",
+    "utilities": "Utilitaires"
+  },
+  "validation": {
+    "required": "est requis",
+    "invalid": "n'est pas valide",
+    "mustBeNumber": "doit être un nombre",
+    "minValue": "doit être au moins {{min}}",
+    "maxValue": "ne doit pas dépasser {{max}}",
+    "notNegative": "ne doit pas être négatif",
+    "notInPast": "ne doit pas être dans le passé",
+    "mustBeAfter": "doit être après {{field}}",
+    "mustBeExact": "doit être exactement {{value}}",
+    "sumMustBe": "La somme doit être {{value}}",
+    "mustCoverYears": "doit couvrir au moins {{years}} années complètes et se terminer en fin d'année (31.12.)",
+    "minWords": "Au moins {{count}} mots requis",
+    "minWordLength": "Au moins un mot avec {{length}} lettres requis"
+  }
+}

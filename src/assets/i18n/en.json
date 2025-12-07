@@ -1,0 +1,571 @@
+{
+  "menu": {
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "theme": "Theme",
+    "language": "Language",
+    "offers": "Offers",
+    "profile": "Profile",
+    "reportBug": "Report Bug",
+    "textSize": {
+      "title": "Text Size",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "fuv": {
+      "main": "FUV Offer Tool",
+      "overview": "Overview",
+      "searchPerson": "Search Person",
+      "searchBetrieb": "Search Company",
+      "searchOffer": "Search Offer"
+    },
+    "vt": {
+      "main": "Insurance Technology",
+      "manageFileDecision": "Manage File Decision",
+      "updateBB": "Update BB",
+      "bb": {
+        "title": "Update BB",
+        "einladung": "Invitation",
+        "erinnerung": "Reminder",
+        "mahnung": "Dunning"
+      },
+      "aktenentscheid": {
+        "table": {
+          "btcode": "BT-Code",
+          "experte_boid": "Expert BOID",
+          "aufgabe_boid": "Task BOID"
+        }
+      },
+      "aktenentscheid.help": "The uploaded Excel file must contain the following columns: partnernr, btcode, experte_boid, aufgabe_boid."
+    },
+    "inex": {
+      "main": "In-/Exkasso",
+      "manageDrugReclaim": "Manage Drug Reclaim",
+      "evaluateOpPayments": "Evaluate OP Payments for Regress"
+    },
+    "system": {
+      "main": "System",
+      "manageSettings": "Show Tax Table",
+      "manageScheduler": "Manage Scheduler",
+      "manageCodeTable": "Manage Code Table",
+      "managePermissions": "Manage Permissions",
+      "utilities": "Utilities"
+    }
+  },
+  "language": {
+    "german": "German",
+    "english": "English",
+    "french": "French",
+    "italian": "Italian"
+  },
+  "profilePage": {
+    "title": "User Profile",
+    "details": {
+      "title": "User Details",
+      "name": "Name",
+      "email": "Email",
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "memberSince": "Member Since",
+      "department": "Department"
+    },
+    "preferences": {
+      "title": "User Preferences",
+      "language": "Language",
+      "theme": "Theme",
+      "preset": "Preset",
+      "primaryColor": "Primary Color",
+      "darkMode": "Dark Mode",
+      "autoDarkMode": "Auto Dark Mode (OS)",
+      "scale": "Scale",
+      "menuLayout": "Menu Layout",
+      "vertical": "Vertical",
+      "horizontal": "Horizontal",
+      "resetButton": "Reset to Defaults",
+      "selectLanguage": "Select Language",
+      "selectTheme": "Select Theme",
+      "selectScale": "Select Scale"
+    }
+  },
+  "bugReport": {
+    "title": "Report a Bug",
+    "descriptionLabel": "Please describe the issue you encountered",
+    "descriptionPlaceholder": "Enter bug description here...",
+    "collectedInfoLabel": "The following information will be automatically included in your report",
+    "includeScreenshotLabel": "Include screenshot of the current page",
+    "screenshotPreviewLabel": "Screenshot Preview",
+    "screenshotProhibitedTitle": "Screenshot Disabled",
+    "screenshotProhibitedMessage": "Screenshots are disabled on this page to protect sensitive information.",
+    "noScreenshotAvailable": "No screenshot could be captured for this page.",
+    "submitButton": "Submit Report",
+    "cancelButton": "Cancel",
+    "submitting": "Submitting...",
+    "successSummary": "Report Submitted",
+    "successDetail": "Thank you for your feedback!",
+    "errorSummary": "Submission Failed",
+    "errorDetail": "Could not submit bug report. Please try again later.",
+    "warnNoDescriptionSummary": "Description Missing",
+    "warnNoDescriptionDetail": "Please describe the bug before submitting.",
+    "missingDataError": "Required application information is missing for the bug report."
+  },
+  "mockError": {
+    "title": "Mock Error Simulation",
+    "503": "Service Unavailable (503)",
+    "500": "Internal Server Error (500)",
+    "403": "Forbidden (403)",
+    "404": "Not Found (404)",
+    "reset": "Reset",
+    "currentState": "Current State",
+    "active": "{{status}} with {{delay}}ms delay",
+    "inactive": "Inactive"
+  },
+  "onboarding": {
+    "buttons": {
+      "next": "Next",
+      "previous": "Previous",
+      "finish": "Finish",
+      "skip": "Skip Tour",
+      "start": "Start Tour",
+      "dontShowAgain": "Don't show again"
+    },
+    "initialDialog": {
+      "title": "Welcome to the Application!",
+      "content": "Would you like to take a quick tour to see the new features?",
+      "confirm": "Start Tour",
+      "cancel": "Maybe Later"
+    },
+    "steps": {
+      "menuActions": {
+        "title": "Quick Actions",
+        "description": "Here you can find quick actions like theme and language switching, your user profile, and a way to report bugs."
+      },
+      "lightSwitch": {
+        "title": "Light Switch",
+        "description": "Easily toggle between light and dark mode."
+      },
+      "themeSwitch": {
+        "title": "Theme Switch",
+        "description": "Choose from various themes to personalize your experience."
+      },
+      "textSwitch": {
+        "title": "Language Selection",
+        "description": "Change the application language and text size at any time from this menu."
+      },
+      "userProfile": {
+        "title": "User Profile",
+        "description": "Access your profile settings and preferences here."
+      },
+      "bugReport": {
+        "title": "Report a Bug",
+        "description": "Encountered an issue? Use this button to quickly report bugs and help us improve the application."
+      }
+    }
+  },
+  "police": {
+    "steps": {
+      "checkliste": "Checklist",
+      "versichertePerson": "Insured person",
+      "fuvBetrieb": "FUV Company",
+      "taetigkeit": "Occupation",
+      "varianten": "Variants",
+      "antragsfragen": "Application questions",
+      "abschluss": "Completion",
+      "nachbearbeitung": "Post-processing"
+    },
+    "fuvBetrieb": {
+      "searchBetrieb": "Search Company",
+      "searchLabel": "Search FUV Company",
+      "searchPlaceholder": "Click to search for a company",
+      "searchDialogHeader": "Search Company"
+    },
+    "versichertePerson": {
+      "searchPerson": "Search Person",
+      "searchLabel": "Search Insured Person",
+      "searchPlaceholder": "Click to search for a person",
+      "searchDialogHeader": "Search Person"
+    }
+  },
+  "searchPerson": {
+    "validation": {
+      "atLeastTwoFieldsRequired": "Please provide at least two of the fields {{field1}}, {{field2}} or {{field3}} (unless you are searching by {{except}}).",
+      "nameMinLength": "The field {{field}} must be at least 3 characters long when used for search.",
+      "geburtstagPattern": "Please enter a valid date in the format DD.MM.YYYY."
+    },
+    "fields": {
+      "name": "Name",
+      "vorname": "First Name",
+      "geburtstag": "Date of Birth",
+      "svnr": "Suva No.",
+      "partnernr": "Partner No.",
+      "uidNr": "UID No."
+    },
+    "details": {
+      "title": "Details for {{personName}}",
+      "backToSearch": "Back to search",
+      "selectedPerson": "Selected Person",
+      "street": "Street",
+      "zipCity": "ZIP/City",
+      "audit": "Audit",
+      "sustatus": "S/U-Status",
+      "createOffer": "Create Offer",
+      "plz": "ZIP",
+      "ort": "City"
+    },
+    "table": {
+      "emptyMessage": "No persons found."
+    },
+    "offertenTable": {
+      "emptyMessage": "No FUV offers for this person.",
+      "captionText": "Existing FUV Offers",
+      "offertenr": "Offer No.",
+      "name": "Customer",
+      "erstellungsdatum": "Creation Date",
+      "total": "Total",
+      "abschlussdatum": "Closing date"
+    },
+    "vertraegeTable": {
+      "emptyMessage": "No contracts for this person.",
+      "captionText": "Existing contracts",
+      "ablaufdatum": "Expiry",
+      "vertragsende": "End of contract",
+      "betriebsteil": "Part of the company",
+      "stufe": "Level"
+    }
+  },
+  "betrieb": {
+    "search": {
+      "title": "Search Company",
+      "criteria": "Search Criteria"
+    },
+    "fields": {
+      "svnr": "Suva No.",
+      "partnernr": "Partner No.",
+      "uidNr": "UID No.",
+      "name": "Name"
+    },
+    "validation": {
+      "atLeastOneFieldRequired": "Please provide at least one of the fields {{field1}}, {{field2}}, {{field3}} or {{field4}}.",
+      "nameMinLength": "The field {{field}} must be at least {{min}} characters long when used for search."
+    },
+    "table": {
+      "emptyMessage": "No companies found.",
+      "captionText": "Found companies"
+    }
+  },
+  "common": {
+    "search": "Search",
+    "reset": "Reset",
+    "export": "Export",
+    "status": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "all": "All",
+    "contract": "Contract",
+    "partnerNo": "Partner No.",
+    "suvaNo": "Suva No.",
+    "uidNo": "UID No.",
+    "person": "Person",
+    "partner": "Partner",
+    "company": "Company",
+    "name": "Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "searchCriteria": "Search Criteria",
+    "searchPerson": "Search Person",
+    "crm": "CRM",
+    "syrius": "SYRIUS",
+    "idms": "idms",
+    "crif": "CRIF",
+    "buttons": {
+      "change": "Change",
+      "downloadExample": "Download Example"
+    },
+    "error": {
+      "requiredColumns": "The uploaded file does not contain the required columns. Required columns are: {columns}."
+    },
+    "table": {
+      "noData": "No data found",
+      "showExampleTable": "Show example table"
+    },
+    "personnelNumber": "Personnel Number",
+    "clear": "Clear",
+    "upload": {
+      "title": "Upload File",
+      "subtitle": "Drag and drop a file here or click to select a file.",
+      "fileTypes": "Allowed file types: {0}",
+      "label": "Upload Excel file"
+    },
+    "example": {
+      "title": "Example of the expected format"
+    },
+    "searchBetrieb": {
+      "table": {
+        "emptyMessage": "No companies found.",
+        "captionText": "Found companies"
+      }
+    },
+    "recentSearches": "Recently used",
+    "clearHistory": "Clear history",
+    "noRecentSearches": "No recent searches",
+    "validation": {
+      "required": "This field is required.",
+      "minLength": "This field must be at least {{min}} characters long.",
+      "maxLength": "This field must be at most {{max}} characters long.",
+      "germanDate": "Please enter a valid date in the format DD.MM.YYYY.",
+      "atLeastNFields": "Please fill in at least {{n}} of the following fields: {{fields}}."
+    }
+  },
+  "core": {
+    "backendErrorBanner": {
+      "title": "Backend Service Issues Detected",
+      "message": "We're experiencing technical difficulties. Your work is saved locally and will be synced when the service recovers. Please try again later.",
+      "close": "Close notification"
+    },
+    "interceptors": {
+      "error": {
+        "timeout": {
+          "summary": "Warning",
+          "detail": "Backend is not responding. Your changes are saved locally."
+        },
+        "serverError": {
+          "summary": "Warning",
+          "detail": "A server error occurred, but your changes are saved locally."
+        },
+        "genericError": "An error has occurred. Please try again later."
+      }
+    }
+  },
+  "fileUpload": {
+    "title": "Upload File",
+    "subtitle": "Drag and drop a file here or click to select a file.",
+    "fileTypes": "Allowed file types: {0}",
+    "errors": {
+      "parseError": "Error parsing the Excel file: {message}",
+      "emptyFile": "The Excel file is empty or has an unexpected format.",
+      "noDataRows": "The Excel file does not contain any data rows."
+    }
+  },
+  "aktenentscheid": {
+    "title": "Manage File Decision",
+    "description": "Upload an Excel file to create a new file decision or update an existing one.",
+    "example": {
+      "title": "Example of the expected format",
+      "show": "Show example"
+    }
+  },
+  "vt": {
+    "bb": {
+      "erinnerung": {
+        "title": "Manage Reminder",
+        "description": "Upload an Excel file to create a new reminder or update an existing one."
+      },
+      "einladung": {
+        "title": "Manage Invitation",
+        "description": "Upload an Excel file to create a new invitation or update an existing one."
+      },
+      "mahnung": {
+        "title": "Manage Dunning",
+        "description": "Upload an Excel file to create a new dunning or update an existing one."
+      }
+    }
+  },
+  "bb-aktualisieren": {
+    "title": "Update BB",
+    "description": "Upload an Excel file to update the BB data.",
+    "tab": {
+      "einladung": "Invitation",
+      "erinnerung": "Reminder",
+      "mahnung": "Dunning"
+    },
+    "upload": {
+      "einladung": {
+        "title": "Upload Invitation File"
+      },
+      "erinnerung": {
+        "title": "Upload Reminder File"
+      },
+      "mahnung": {
+        "title": "Upload Dunning File"
+      },
+      "table": {
+        "fallnummer": "Case Number",
+        "versichertennummer": "Insurance Number"
+      }
+    }
+  },
+  "fuv": {
+    "overview": {
+      "offerten": {
+        "title": "Offers",
+        "betrieb": "Company",
+        "offertenr": "Offer No.",
+        "user": "User",
+        "status": "Status",
+        "artDerOfferte": "Type of Offer",
+        "gueltigAb": "Valid from",
+        "gueltigBis": "Offer valid until",
+        "dauerDesVertrages": "Duration of Contract",
+        "stellungImBetrieb": "Position in Company",
+        "beschaeftigungsgrad": "Employment Level",
+        "klasse": "Class",
+        "basisstufe": "Base Level",
+        "person": "Person",
+        "erstellungsdatum": "Creation Date",
+        "total": "Total (CHF)"
+      },
+      "vertraege": {
+        "title": "Contracts",
+        "vertragNr": "Contract No.",
+        "betriebName": "Company",
+        "vertragsbeginn": "Start",
+        "ablaufdatum": "Expiry/Renewal",
+        "status": "Status",
+        "betreuer": "Supervisor"
+      },
+      "timeFilter": {
+        "unknown": "Unknown time filter",
+        "thisWeek": "This Week",
+        "last10days": "Last 10 Days",
+        "last30days": "Last 30 Days",
+        "last60days": "Last 60 Days"
+      },
+      "scopeFilter": {
+        "meine": "My",
+        "agentur": "Agency"
+      }
+    },
+    "searchOfferte": {
+      "validation": {
+        "atLeastOneFieldRequired": "Please provide at least one of the search fields."
+      },
+      "offertenr": "Offer no.",
+      "partnerNrCompany": "Partner no. company",
+      "partnerNrPerson": "Partner no. person",
+      "table": {
+        "betrieb": "Company",
+        "offertenr": "Offer No.",
+        "user": "User",
+        "status": "Status",
+        "artDerOfferte": "Type of Offer",
+        "gueltigAb": "Valid from",
+        "gueltigBis": "Valid until",
+        "dauerDesVertrages": "Duration of contract",
+        "stellungImBetrieb": "Position in company",
+        "beschaeftigungsgrad": "Employment level",
+        "klasse": "Class",
+        "basisstufe": "Base level",
+        "person": "Person",
+        "noResults": "No offers found.",
+        "captionText": "Search Results Offers"
+      }
+    },
+    "betrieb": {
+      "title": "Company",
+      "branch": "Industry",
+      "detail": {
+        "offers": "Related offers",
+        "contracts": "Related contracts",
+        "table": {
+          "offertenr": "Offer No.",
+          "name": "Name",
+          "status": "Status",
+          "erstellungsdatum": "Created on",
+          "total": "Total",
+          "vertragNr": "Contract No.",
+          "betriebName": "Company",
+          "gueltigAb": "Valid from",
+          "gueltigBis": "Valid until"
+        }
+      }
+    },
+    "offerte": {
+      "title": "Offer",
+      "detail": {
+        "title": "Offer {{identifier}}",
+        "fields": {
+          "offertenr": "Offer No.",
+          "name": "Name",
+          "status": "Status",
+          "erstellungsdatum": "Created on",
+          "gueltigAb": "Valid from",
+          "gueltigBis": "Valid until",
+          "total": "Total"
+        }
+      }
+    },
+    "vertrag": {
+      "title": "Contract",
+      "detail": {
+        "title": "Contract {{identifier}}",
+        "fields": {
+          "vertragNr": "Contract No.",
+          "betriebName": "Company",
+          "status": "Status",
+          "gueltigAb": "Valid from",
+          "gueltigBis": "Valid until"
+        }
+      }
+    },
+    "police": {
+      "title": "Offer Application for Company Insurance",
+      "description": "Insurance coverage for occupational and non-occupational accidents as well as occupational diseases according to the Federal Law on Accident Insurance (UVG)",
+      "banners": {
+        "policiert": {
+          "title": "Quote has been issued",
+          "description": "The quote has been issued and is read-only. No further changes can be made."
+        },
+        "rejected": {
+          "title": "Quote was rejected",
+          "description": "This quote was rejected and is read-only. No further changes can be made."
+        }
+      },
+      "tooltips": {
+        "offertantrag": {
+          "vttRejected": "Offer application cannot be printed because the quote was rejected by VTT.",
+          "checklistMissing": "Offer application cannot be printed because the checklist is not fully completed."
+        }
+      },
+      "messages": {
+        "offerteNotFound": "Quote {{offertenr}} not found",
+        "loadOfferteError": "Error loading quote",
+        "saveSuccess": "Changes saved",
+        "saveError": "Error saving changes",
+        "saveOfferteError": "Error saving quote",
+        "noOfferte": "No quote available",
+        "mustSaveFirst": "Quote must be saved first",
+        "tezuMissing": "The technical assignment has not been calculated yet. Please go to step 4 (Variants) and click \"Calculate\".",
+        "printOfferteSuccess": "Quote printed successfully and OPUS document opened",
+        "printOffertantragSuccess": "Offer application printed successfully and OPUS document opened",
+        "taskCreated": "Task has been created",
+        "signatureValidationFailed": "The quote cannot be signed. The completeness check still has open items."
+      },
+      "steps": {
+        "checkliste": "Checklist",
+        "person": "Insured Person",
+        "versichertePerson": "Insured Person",
+        "betrieb": "FUV Company",
+        "fuvBetrieb": "FUV Company",
+        "taetigkeit": "Occupation",
+        "varianten": "Variants",
+        "antragsfragen": "Application Questions",
+        "abschluss": "Completion",
+        "nachbearbeitung": "Post-processing"
+      },
+      "buttons": {
+        "checkliste": "Checklist",
+        "checklisteOpen": "Create / edit checklist",
+        "schliessen": "Close",
+        "unverbindlicheOfferteDrucken": "Print Non-binding Offer",
+        "offertantragDrucken": "Print Offer Application",
+        "verlaengerungsofferteDrucken": "Print Renewal Offer",
+        "offerteAblehnen": "Decline Offer",
+        "crm": "CRM",
+        "syrius": "SYRIUS",
+        "eDossier": "eDossier"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+:host ::ng-deep .status-succeeded {
+    background-color: #c8e6c9; /* Light Green */
+}
+
+:host ::ng-deep .status-failed {
+    background-color: #ffcdd2; /* Light Red */
+}
+
+:host ::ng-deep .status-pending {
+    background-color: #feedaf; /* Light Yellow */
+}

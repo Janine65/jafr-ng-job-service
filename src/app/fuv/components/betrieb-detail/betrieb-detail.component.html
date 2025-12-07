@@ -1,0 +1,117 @@
+<div class="flex flex-col gap-5">
+    <ng-container *ngIf="betrieb() as betrieb; else loadingOrMissing">
+        <!-- Betrieb Details START -->
+        <p-card>
+            <!-- Header Row -->
+            <div class="flex justify-between items-center mb-4 pb-3 border-b">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h3 class="m-0 text-xl font-bold">{{ 'fuv.betrieb.detailTitle' | translate: { betrieb: getBetriebNameForDisplay(betrieb) || '-' } }}</h3>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button pButton type="button" [label]="'common.services.crm' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrm(betrieb)"></button>
+                    <button pButton type="button" [label]="'common.services.syrius' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenSyrius(betrieb)"></button>
+                    <button pButton type="button" [label]="'common.services.idms' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenIdms(betrieb)"></button>
+                    <button pButton type="button" [label]="'common.services.crif' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrif(betrieb)"></button>
+                    <button pButton type="button" [label]="'common.services.documents' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenDocuments(betrieb)"></button>
+                    <div class="border-l h-8 mx-2"></div>
+                    <button pButton type="button" [label]="'common.search.back' | translate" icon="pi pi-arrow-left" class="p-button-outlined p-button-sm" (click)="onBack()"></button>
+                </div>
+            </div>
+
+            <!-- Info Grid with Visual Grouping -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Business Information -->
+                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                    <div class="font-semibold text-gray-600 dark:text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="pi pi-building text-primary"></i>
+                        {{ 'common.partner.betrieb' | translate }}
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-building text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.name' | translate }}</span>
+                            <span class="font-semibold">{{ getBetriebNameForDisplay(betrieb) || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-home text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.strasse' | translate }}</span>
+                            <span class="font-semibold">{{ betrieb.strasse }}{{ betrieb.hausnr ? ' ' + betrieb.hausnr : '' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-map-marker text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.ort' | translate }}</span>
+                            <span class="font-semibold">{{ betrieb.plz }} {{ betrieb.ort }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                    <div class="font-semibold text-gray-600 dark:text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="pi pi-id-card text-primary"></i>
+                        {{ 'common.partner.details' | translate }}
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-hashtag text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.partnernr' | translate }}</span>
+                            <span class="font-semibold">{{ betrieb.partnernr || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-hashtag text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.suvanr' | translate }}</span>
+                            <span class="font-semibold">{{ betrieb.suvanr || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-hashtag text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.uidNr' | translate }}</span>
+                            <span class="font-semibold">{{ betrieb.uidnr | uidNrFormat }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-chart-line text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.bonitaet' | translate }}</span>
+                            <span class="font-semibold">{{ (betrieb.bonitaet | codeLabel | async) || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-shield text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.audit' | translate }}</span>
+                            <span class="font-semibold">{{ (betrieb.audit ? 'common.status.yes' : 'common.status.no') | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+        <!-- Betrieb Details END -->
+
+        <p-card [header]="'fuv.common.vorhandeneOfferten' | translate">
+            <syr-data-table [data]="offertenTableData()" [columnDefs]="offertenColumnDefs" [config]="offertenTableConfig" [loading]="loadingRelations()" (rowSelected)="openOfferte($event)"></syr-data-table>
+            <div class="flex justify-content-center mt-3" *ngIf="canCreateOfferte()">
+                <button pButton type="button" [label]="'fuv.common.offerteErstellen' | translate" icon="pi pi-plus" (click)="createOfferte()"></button>
+            </div>
+        </p-card>
+
+        <p-card [header]="'fuv.common.vorhandeneVertraege' | translate">
+            <syr-data-table [data]="vertraegeTableData()" [columnDefs]="vertraegeColumnDefs" [config]="vertraegeTableConfig" [loading]="loadingRelations()"></syr-data-table>
+        </p-card>
+    </ng-container>
+
+    <ng-template #loadingOrMissing>
+        <ng-container *ngIf="loadingBetrieb(); else noBetriebFound">
+            <p-card>
+                <div class="flex justify-center py-6">
+                    <app-loading-spinner></app-loading-spinner>
+                </div>
+            </p-card>
+        </ng-container>
+        <ng-template #noBetriebFound>
+            <div class="py-6 text-center text-600">
+                {{ 'common.search.noResults' | translate }}
+            </div>
+        </ng-template>
+    </ng-template>
+</div>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog></p-confirmDialog>

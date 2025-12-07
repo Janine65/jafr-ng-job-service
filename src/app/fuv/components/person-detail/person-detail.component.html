@@ -1,0 +1,118 @@
+<div class="flex flex-col gap-5">
+    <ng-container *ngIf="person() as person; else loadingOrMissing">
+        <!-- Person Details START -->
+        <p-card>
+            <!-- Header Row -->
+            <div class="flex justify-between items-center mb-4 pb-3 border-b">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h3 class="m-0 text-xl font-bold">{{ 'fuv.person.detailTitle' | translate: { person: person.name + ', ' + person.vorname } }}</h3>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button pButton type="button" [label]="'common.services.crm' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrm(person)"></button>
+                    <button pButton type="button" [label]="'common.services.syrius' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenSyrius(person)"></button>
+                    <button pButton type="button" [label]="'common.services.idms' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenIdms(person)"></button>
+                    <button pButton type="button" [label]="'common.services.crif' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrif(person)"></button>
+                    <div class="border-l h-8 mx-2"></div>
+                    <button pButton type="button" [label]="'common.search.back' | translate" icon="pi pi-arrow-left" class="p-button-outlined p-button-sm" (click)="onBack()"></button>
+                </div>
+            </div>
+
+            <!-- Info Grid with Visual Grouping -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Personal Information -->
+                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                    <div class="font-semibold text-gray-600 dark:text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="pi pi-user text-primary"></i>
+                        {{ 'common.partner.personalInfo' | translate }}
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-user text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.name' | translate }}</span>
+                            <span class="font-semibold">{{ person.name }}, {{ person.vorname }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-home text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.strasse' | translate }}</span>
+                            <span class="font-semibold">{{ person.strasse }}{{ person.hausnr ? ' ' + person.hausnr : '' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-map-marker text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.ort' | translate }}</span>
+                            <span class="font-semibold">{{ person.plz }} {{ person.ort }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-calendar text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.geburtstag' | translate }}</span>
+                            <span class="font-semibold">{{ person.geburtstag | date: 'dd.MM.yyyy' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                    <div class="font-semibold text-gray-600 dark:text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="pi pi-id-card text-primary"></i>
+                        {{ 'common.partner.details' | translate }}
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-hashtag text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.partnernr' | translate }}</span>
+                            <span class="font-semibold">{{ person.partnernr || '-' }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-hashtag text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">SV-Nr.</span>
+                            <span class="font-semibold">{{ person.svnr | svNrFormat }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-shield text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.audit' | translate }}</span>
+                            <span class="font-semibold">{{ (person.audit ? 'common.status.yes' : 'common.status.no') | translate }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-info-circle text-gray-500"></i>
+                            <span class="text-gray-600 dark:text-gray-400 w-24">{{ 'common.partner.sustatus' | translate }}</span>
+                            <span class="font-semibold" [ngClass]="{ 'text-red-600 dark:text-red-400': isSuStatusUnclear() }">
+                                {{ suStatusLabel() }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+        <!-- Person Details END -->
+
+        <p-card [header]="'fuv.common.vorhandeneOfferten' | translate">
+            <syr-data-table [data]="offertenTableData()" [columnDefs]="offertenColumnDefs" [config]="offertenTableConfig" [loading]="loadingRelations()" (rowSelected)="openOfferte($event)"></syr-data-table>
+            <div class="flex justify-content-center mt-3" *ngIf="canCreateOfferte()">
+                <button pButton type="button" [label]="'fuv.common.offerteErstellen' | translate" icon="pi pi-plus" (click)="createOfferte()"></button>
+            </div>
+        </p-card>
+
+        <p-card [header]="'fuv.common.vorhandeneVertraege' | translate">
+            <syr-data-table [data]="vertraegeTableData()" [columnDefs]="vertraegeColumnDefs" [config]="vertraegeTableConfig" [loading]="loadingRelations()"></syr-data-table>
+        </p-card>
+    </ng-container>
+
+    <ng-template #loadingOrMissing>
+        <ng-container *ngIf="loadingPerson(); else noPersonFound">
+            <p-card>
+                <div class="flex justify-center py-6">
+                    <app-loading-spinner></app-loading-spinner>
+                </div>
+            </p-card>
+        </ng-container>
+        <ng-template #noPersonFound>
+            <div class="py-6 text-center text-600">
+                {{ 'common.search.noResults' | translate }}
+            </div>
+        </ng-template>
+    </ng-template>
+</div>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog></p-confirmDialog>

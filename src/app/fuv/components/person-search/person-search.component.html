@@ -1,0 +1,97 @@
+<ng-container *ngIf="!isDialog; else dialogView">
+    <p-card [header]="'menu.fuv.searchPerson' | translate" class="mb-5">
+        <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+    </p-card>
+</ng-container>
+
+<ng-template #dialogView>
+    <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+</ng-template>
+
+<ng-template #searchContent>
+    <div>
+        <form #searchForm="ngForm" (ngSubmit)="onSubmit()">
+            <p-panel [header]="'common.search.searchCriteria' | translate" [toggleable]="true" [(collapsed)]="searchCriteriaCollapsed">
+                <div class="flex flex-col md:flex-row md:flex-wrap gap-3 mb-4">
+                    <div class="flex flex-col flex-1">
+                        <label for="name">{{ 'common.partner.name' | translate }}</label>
+                        <input pInputText id="name" type="text" [(ngModel)]="searchFormData.name" name="name" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('name') }" />
+                        <small *ngIf="hasError('name')" class="text-red-500">
+                            {{ getErrorMessage('name') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="vorname">{{ 'common.partner.vorname' | translate }}</label>
+                        <input pInputText id="vorname" type="text" [(ngModel)]="searchFormData.vorname" name="vorname" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('vorname') }" />
+                        <small *ngIf="hasError('vorname')" class="text-red-500">
+                            {{ getErrorMessage('vorname') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="geburtstag">{{ 'common.partner.geburtstag' | translate }}</label>
+                        <input pInputText id="geburtstag" type="text" [(ngModel)]="searchFormData.geburtstag" name="geburtstag" placeholder="TT.MM.YYYY" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('geburtstag') }" />
+                        <small *ngIf="hasError('geburtstag')" class="text-red-500">
+                            {{ getErrorMessage('geburtstag') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="svnr">{{ 'common.partner.svnr' | translate }}</label>
+                        <input pInputText id="svnr" type="text" [(ngModel)]="searchFormData.svnr" name="svnr" autocomplete="off" />
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="partnernr">{{ 'common.partner.partnernr' | translate }}</label>
+                        <input pInputText id="partnernr" type="text" [(ngModel)]="searchFormData.partnernr" name="partnernr" autocomplete="off" />
+                    </div>
+                </div>
+                <small *ngIf="hasFormError()" class="text-red-500 block mb-2">
+                    {{ getFormErrorMessage() }}
+                </small>
+                <div class="flex gap-2 mt-4 items-center">
+                    <button pButton type="submit" [label]="'common.search.title' | translate" icon="pi pi-search"></button>
+                    <button pButton type="button" [label]="'common.search.recent' | translate" icon="pi pi-history" (click)="pop.toggle($event)"></button>
+                    <button pButton type="button" [label]="'common.search.reset' | translate" icon="pi pi-filter-slash" class="p-button-outlined" (click)="resetForm()"></button>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <label for="searchLocalOnly" class="text-sm whitespace-nowrap">Nur in vorbereiteten Daten suchen</label>
+                        <p-toggleswitch [(ngModel)]="searchLocalOnly" inputId="searchLocalOnly" [ngModelOptions]="{ standalone: true }"></p-toggleswitch>
+                    </div>
+                    <p-popover #pop>
+                        <ng-template pTemplate="content">
+                            <div *ngIf="recentSearches.length > 0; else noRecentSearches">
+                                <ul class="list-none p-0 m-0">
+                                    <li
+                                        *ngFor="let search of recentSearches"
+                                        tabindex="0"
+                                        (click)="onRecentSearchSelect(search); pop.hide()"
+                                        (keydown.enter)="onRecentSearchSelect(search); pop.hide()"
+                                        class="p-2 hover:bg-gray-200 cursor-pointer flex align-items-center gap-2 group"
+                                        style="display: flex"
+                                    >
+                                        <span style="flex: 1">{{ search.vorname }} {{ search.name }}, {{ search.svnr }}</span>
+                                        <i class="pi pi-times cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity" style="font-size: 1rem; color: #6c757d" (click)="removeRecentSearch(search, $event)" pTooltip="Eintrag entfernen"></i>
+                                    </li>
+                                </ul>
+                                <button pButton type="button" [label]="'common.search.clearHistory' | translate" icon="pi pi-trash" class="p-button-text mt-2" (click)="clearRecentSearches()"></button>
+                            </div>
+                            <ng-template #noRecentSearches>
+                                <p>{{ 'common.search.noRecentSearches' | translate }}</p>
+                            </ng-template>
+                        </ng-template>
+                    </p-popover>
+                </div>
+            </p-panel>
+        </form>
+
+        <div *ngIf="searchStarted && validationErrors.size === 0" class="mt-4">
+            <syr-data-table-panel
+                [panelHeader]="'common.search.results' | translate"
+                [panelToggleable]="true"
+                [data]="searchResults"
+                [columnDefs]="personColumnDefs"
+                [config]="personTableConfig"
+                [loading]="personSearchLoading"
+                (rowSelected)="onPersonSelect($event)"
+            >
+            </syr-data-table-panel>
+        </div>
+    </div>
+</ng-template>

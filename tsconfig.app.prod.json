@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "preserveSymlinks": false,
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@env/*": ["src/environments/*"],
+      "@root/*": ["./*"],
+      "@core/*": ["src/app/core/*"],
+      "@models/*": ["src/app/core/interfaces/*"],
+      "@components/*": ["src/app/shared/components/*"],
+      "@features/*": ["src/app/features/*"],
+      "@services/*": ["src/app/core/services/*"],
+      "@pipes/*": ["src/app/core/pipes/*"],
+      "@state/*": ["src/app/core/state/*"],
+      "@pages/*": ["src/app/core/components/*"]
+    }
+  }
+}

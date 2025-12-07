@@ -1,0 +1,31 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Session Storage</div>
+            <div class="field">
+                <label for="sessionStorageContent">Content:</label>
+                <textarea id="sessionStorageContent" pInputTextarea [(ngModel)]="sessionStorageData" rows="10" style="width: 100%"></textarea>
+            </div>
+            <div class="flex justify-content-end flex-wrap gap-2 my-4">
+                <p-button label="Save" icon="pi pi-save" class="p-button-success" (click)="saveSessionStorage()"></p-button>
+                <p-button label="Invalidate Role Cache" icon="pi pi-refresh" class="p-button-warning" (click)="clearRoleMappingsCache()"></p-button>
+                <p-button label="Clear All" icon="pi pi-trash" class="p-button-danger" (click)="clearAllSessionStorage()"></p-button>
+                <p-button label="Refresh" icon="pi pi-sync" class="p-button-info" (click)="loadSessionStorage()"></p-button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Local Storage</div>
+            <div class="field">
+                <label for="localStorageContent">Content:</label>
+                <textarea id="localStorageContent" pInputTextarea [(ngModel)]="localStorageData" rows="10" style="width: 100%"></textarea>
+            </div>
+            <div class="flex justify-content-end flex-wrap gap-2 my-4">
+                <p-button label="Save" icon="pi pi-save" class="p-button-success" (click)="saveLocalStorage()"></p-button>
+                <p-button label="Clear All" icon="pi pi-trash" class="p-button-danger" (click)="clearAllLocalStorage()"></p-button>
+                <p-button label="Refresh" icon="pi pi-sync" class="p-button-info" (click)="loadLocalStorage()"></p-button>
+            </div>
+        </div>
+    </div>
+</div>

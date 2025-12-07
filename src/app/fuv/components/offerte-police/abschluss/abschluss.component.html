@@ -1,0 +1,185 @@
+<div class="w-full">
+    <p-panel header="{{ 'fuv.police.steps.abschluss' | translate }}" [toggleable]="false">
+        <div class="space-y-6">
+            <!-- VTT Rejection Banner (highest priority - shown first) -->
+            <div *ngIf="isVttRejected()" class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                <div class="flex items-start">
+                    <i class="pi pi-exclamation-triangle text-red-600 text-xl mr-3 mt-0.5"></i>
+                    <div>
+                        <p class="text-sm font-semibold text-red-800 mb-2">{{ 'fuv.police.abschluss.vttRejection.title' | translate }}</p>
+                        <p class="text-sm text-red-700">{{ 'fuv.police.abschluss.vttRejection.message' | translate }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Invalidation Warning Banner (only shown when signature was invalidated) -->
+            <div *ngIf="showSignatureBanner() && signatureWasInvalidated()" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-start">
+                        <i class="pi pi-exclamation-triangle text-yellow-600 text-xl mr-3 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold mb-1 text-yellow-800">{{ 'fuv.police.abschluss.signatureInvalidation.title' | translate }}</p>
+                            <p class="text-sm text-yellow-700">{{ 'fuv.police.abschluss.signatureInvalidation.message' | translate }}</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 ml-3 flex-shrink-0" (click)="dismissSignatureBanner()" [attr.aria-label]="'common.actions.close' | translate">
+                        <i class="pi pi-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Validation Error Banner -->
+            <div *ngIf="showValidationErrorBanner()" class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-start">
+                        <i class="pi pi-exclamation-triangle text-red-600 text-xl mr-3 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm text-red-700">{{ 'fuv.police.abschluss.validationError.message' | translate }}</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 ml-3 flex-shrink-0" (click)="dismissValidationErrorBanner()" [attr.aria-label]="'common.actions.close' | translate">
+                        <i class="pi pi-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vollständigkeitsprüfung Panel -->
+            <p-panel [header]="'fuv.police.abschluss.completenessCheck.title' | translate" [toggleable]="true" [(collapsed)]="vollstaendigkeitCollapsed">
+                <div class="space-y-4">
+                    <div *ngFor="let item of validationItems()" class="flex items-start gap-3">
+                        <!-- Status Icon -->
+                        <div class="flex-shrink-0 mt-1">
+                            <i *ngIf="item.status === 'valid'" class="pi pi-check-circle text-green-500 text-2xl"></i>
+                            <i *ngIf="item.status === 'warning'" class="pi pi-exclamation-circle text-red-500 text-2xl"></i>
+                            <i *ngIf="item.status === 'error'" class="pi pi-times-circle text-red-500 text-2xl"></i>
+                        </div>
+
+                        <!-- Label and Message -->
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-800">{{ item.label | translate }}</div>
+                            <div *ngIf="item.message" class="text-sm text-gray-600 mt-1 whitespace-pre-line">
+                                {{ item.message }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-panel>
+
+            <!-- Signature Field - Only show if no physical signature -->
+            <div *ngIf="!hasPhysicalSignature()">
+                <!-- Show canvas if no confirmed digital signature confirmation box -->
+                <div class="relative" *ngIf="!shouldShowDigitalConfirmation()">
+                    <!-- Watermark text -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <span class="text-gray-300 text-2xl font-light select-none">{{ 'fuv.police.abschluss.signature.watermark' | translate }}</span>
+                    </div>
+
+                    <canvas
+                        #signatureCanvas
+                        class="w-full h-64 border-2 bg-white rounded"
+                        [class.border-gray-300]="!isVttRejected()"
+                        [class.border-red-300]="isVttRejected()"
+                        [class.bg-red-50]="isVttRejected()"
+                        [class.pointer-events-none]="viewMode || isVttRejected()"
+                        (mousedown)="!viewMode && !isVttRejected() && startDrawing($event)"
+                        (mousemove)="!viewMode && !isVttRejected() && onMouseMove($event)"
+                        (mouseup)="!viewMode && !isVttRejected() && stopDrawing()"
+                        (mouseleave)="!viewMode && !isVttRejected() && stopDrawing()"
+                        (touchstart)="!viewMode && !isVttRejected() && startDrawing($event)"
+                        (touchmove)="!viewMode && !isVttRejected() && draw($event)"
+                        (touchend)="!viewMode && !isVttRejected() && stopDrawing()"
+                    ></canvas>
+                </div>
+
+                <!-- Show digital signature confirmation with date and revoke button -->
+                <!-- Only shown when loading a previously saved signature (no canvas data) -->
+                <div *ngIf="shouldShowDigitalConfirmation()" class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start flex-1">
+                            <i class="pi pi-check-circle text-blue-600 text-xl mr-3 mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold text-blue-800 mb-1">Digital unterschrieben</p>
+                                <p class="text-sm text-blue-700" *ngIf="getFormattedSignatureDate()">
+                                    Unterschrieben am: <span class="font-semibold">{{ getFormattedSignatureDate() }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            *ngIf="!viewMode && !isVttRejected()"
+                            pButton
+                            type="button"
+                            [label]="'fuv.police.abschluss.signature.discard' | translate"
+                            icon="pi pi-times"
+                            severity="danger"
+                            size="small"
+                            (click)="revokeDigitalSignature()"
+                            class="ml-3 flex-shrink-0"
+                            [pTooltip]="'fuv.police.abschluss.signature.resetDigital' | translate"
+                            tooltipPosition="top"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AVB Confirmation -->
+            <div class="space-y-4">
+                <p class="text-sm font-semibold">{{ 'fuv.police.abschluss.avb.confirmation' | translate }}</p>
+
+                <!-- Show checkbox - disabled if digital signature exists or is being drawn -->
+                <div class="flex items-center space-x-2">
+                    <span
+                        [pTooltip]="hasDigitalSignature() || isDrawingSignature() ? ('fuv.police.abschluss.signature.physicalNotAllowed' | translate) : ''"
+                        tooltipPosition="top"
+                        [showDelay]="300"
+                    >
+                        <p-checkbox
+                            [(ngModel)]="abschlussData.avbBestaetigung"
+                            [binary]="true"
+                            inputId="avbConfirmation"
+                            [disabled]="viewMode || isVttRejected() || hasDigitalSignature() || isDrawingSignature()"
+                            (onChange)="onDataChange()"
+                        ></p-checkbox>
+                    </span>
+                    <label
+                        for="avbConfirmation"
+                        class="text-sm"
+                        [class.text-gray-400]="hasDigitalSignature() || isDrawingSignature()"
+                        [pTooltip]="hasDigitalSignature() || isDrawingSignature() ? ('fuv.police.abschluss.signature.physicalNotAllowed' | translate) : ''"
+                        tooltipPosition="top"
+                        [showDelay]="300"
+                    >
+                        {{ 'fuv.police.abschluss.avb.physicalReturn' | translate }}
+                    </label>
+                </div>
+
+                <!-- Show signature status when physical signature is confirmed -->
+                <div *ngIf="hasPhysicalSignature()" class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start flex-1">
+                            <i class="pi pi-check-circle text-green-600 text-xl mr-3 mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold text-green-800 mb-1">{{ 'fuv.police.abschluss.signature.physicalSigned' | translate }}</p>
+                                <p class="text-sm text-green-700" *ngIf="getFormattedSignatureDate()">
+                                    {{ 'fuv.police.abschluss.signature.signedOn' | translate }}: <span class="font-semibold">{{ getFormattedSignatureDate() }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            *ngIf="!viewMode && !isVttRejected()"
+                            pButton
+                            type="button"
+                            [label]="'fuv.police.abschluss.signature.discard' | translate"
+                            icon="pi pi-times"
+                            severity="danger"
+                            size="small"
+                            (click)="discardPhysicalSignature()"
+                            class="ml-3 flex-shrink-0"
+                            [pTooltip]="'fuv.police.abschluss.signature.resetPhysical' | translate"
+                            tooltipPosition="top"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div>

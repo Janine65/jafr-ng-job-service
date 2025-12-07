@@ -1,0 +1,199 @@
+<div class="w-full">
+    <p-panel header="{{ 'fuv.police.steps.nachbearbeitung' | translate }}" [toggleable]="false">
+        <div class="space-y-6">
+            <!-- Error Banner: VTT Rejected the offerte -->
+            <div *ngIf="isVttRejected() && !viewMode" class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+                <i class="pi pi-times-circle text-red-600 mt-0.5"></i>
+                <div class="text-sm text-red-800">
+                    <strong>VTT-Ablehnung</strong>
+                    <p class="mt-1">Die Offerte wurde von der VTT abgelehnt. Nachbearbeitung ist nicht möglich.</p>
+                    <p class="mt-1 font-medium">Ablehnungsgrund: {{ vttRejectionRemark() }}</p>
+                </div>
+            </div>
+
+            <!-- Information Banner: Offerte must be signed to edit fields -->
+            <div *ngIf="!isVttRejected() && fieldsDisabled() && !viewMode" class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3">
+                <i class="pi pi-info-circle text-blue-600 mt-0.5"></i>
+                <div class="text-sm text-blue-800">
+                    <strong>{{ 'fuv.police.nachbearbeitung.info.title' | translate }}</strong>
+                    <p class="mt-1">{{ 'fuv.police.nachbearbeitung.info.message' | translate }}</p>
+                </div>
+            </div>
+
+            <!-- Nachbearbeitung Section -->
+            <div class="space-y-6">
+                <h3 class="text-lg font-semibold">{{ 'fuv.police.nachbearbeitung.header' | translate }}</h3>
+
+                <!-- Kundengeschenk abgegeben -->
+                <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                    <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.kundengeschenkAbgegeben' | translate }}</label>
+                    <div class="flex space-x-6">
+                        <div class="flex items-center space-x-2">
+                            <p-radioButton name="kundengeschenk" [value]="false" [(ngModel)]="nachbearbeitungData.kundengeschenkAbgegeben" [disabled]="fieldsDisabled()" (onClick)="onDataChange()"></p-radioButton>
+                            <label class="text-sm">{{ 'fuv.police.nachbearbeitung.radioOptions.nein' | translate }}</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <p-radioButton name="kundengeschenk" [value]="true" [(ngModel)]="nachbearbeitungData.kundengeschenkAbgegeben" [disabled]="fieldsDisabled()" (onClick)="onDataChange()"></p-radioButton>
+                            <label class="text-sm">{{ 'fuv.police.nachbearbeitung.radioOptions.ja' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Geschenkbegriff/Artikel -->
+                <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                    <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.geschenkbegriffArtikel' | translate }}</label>
+                    <input pInputText type="text" [(ngModel)]="nachbearbeitungData.geschenkbegriffArtikel" [disabled]="fieldsDisabled()" (ngModelChange)="onDataChange()" class="w-1/4" />
+                </div>
+            </div>
+
+            <!-- Anspruchsberechtigte Section -->
+            <div class="border-t pt-6 space-y-6">
+                <h3 class="text-lg font-semibold">{{ 'fuv.police.nachbearbeitung.anspruchsberechtigte' | translate }}</h3>
+
+                <!-- Interner Vermittler - Verkäufer -->
+                <div class="space-y-2">
+                    <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                        <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.internerVermittlerVerkaeufer' | translate }}</label>
+                        <p-autocomplete
+                            [(ngModel)]="nachbearbeitungData.internerVermittlerVerkaeufer"
+                            [suggestions]="filteredVerkaeufer"
+                            (completeMethod)="filterVerkaeufer($event)"
+                            optionLabel="searchstring"
+                            [dropdown]="true"
+                            [placeholder]="'fuv.police.nachbearbeitung.placeholders.vermittlerWaehlen' | translate"
+                            [forceSelection]="true"
+                            [showClear]="true"
+                            [disabled]="fieldsDisabled()"
+                            (onChange)="onDataChange()"
+                            (onSelect)="onDataChange()"
+                            (onClear)="onDataChange()"
+                            styleClass="w-1/4"
+                        ></p-autocomplete>
+                    </div>
+                    <!-- Zod Validation message - only shown when there's a validation error -->
+                    <div class="text-red-500 text-sm ml-[316px]" *ngIf="showVermittlerValidationError()">
+                        {{ validationErrors()['internerVermittlerVerkaeufer'] }}
+                    </div>
+                </div>
+
+                <!-- Interner Vermittler - Beteiligter (hidden for Verlängerung) -->
+                @if (!isVerlaengerung()) {
+                    <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                        <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.internerVermittlerBeteiligter' | translate }}</label>
+                        <p-autocomplete
+                            [(ngModel)]="nachbearbeitungData.internerVermittlerBeteiligter"
+                            [suggestions]="filteredBeteiligter"
+                            (completeMethod)="filterBeteiligter($event)"
+                            optionLabel="searchstring"
+                            [dropdown]="true"
+                            [placeholder]="'fuv.police.nachbearbeitung.placeholders.vermittlerWaehlen' | translate"
+                            [forceSelection]="true"
+                            [showClear]="true"
+                            [disabled]="fieldsDisabled()"
+                            (onChange)="onDataChange()"
+                            (onSelect)="onDataChange()"
+                            (onClear)="onDataChange()"
+                            styleClass="w-1/4"
+                        ></p-autocomplete>
+                    </div>
+                }
+
+                <!-- Externer Vermittler (hidden for Verlängerung) -->
+                @if (!isVerlaengerung()) {
+                    <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                        <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.externerVermittler' | translate }}</label>
+                        <p-autocomplete
+                            [(ngModel)]="nachbearbeitungData.externerVermittler"
+                            [suggestions]="filteredExternal"
+                            (completeMethod)="filterExternal($event)"
+                            optionLabel="searchstring"
+                            [dropdown]="true"
+                            [placeholder]="'fuv.police.nachbearbeitung.placeholders.vermittlerWaehlen' | translate"
+                            [forceSelection]="true"
+                            [showClear]="true"
+                            [disabled]="fieldsDisabled()"
+                            (onChange)="onDataChange()"
+                            (onSelect)="onDataChange()"
+                            (onClear)="onDataChange()"
+                            styleClass="w-1/4"
+                        ></p-autocomplete>
+                    </div>
+                }
+            </div>
+
+            <!-- Offerte ablehnen Section -->
+            <div class="border-t pt-6 space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">{{ 'fuv.police.nachbearbeitung.offerteAblehnenHeader' | translate }}</h3>
+                    <button
+                        pButton
+                        type="button"
+                        label="{{ 'fuv.police.buttons.offerteAblehnen' | translate }}"
+                        icon="pi pi-times"
+                        severity="danger"
+                        size="large"
+                        (click)="offertAblehnen()"
+                        [disabled]="isAblehnungButtonDisabled()"
+                        [pTooltip]="ablehnungButtonTooltip()"
+                        [tooltipDisabled]="!isAblehnungButtonDisabled()"
+                        tooltipPosition="top"
+                    ></button>
+                </div>
+
+                <!-- Ablehnungsgrund -->
+                <div class="grid grid-cols-[300px_1fr] gap-4 items-center">
+                    <label class="text-sm font-medium">{{ 'fuv.police.nachbearbeitung.ablehnungsgrund' | translate }}</label>
+                    <p-select
+                        [options]="rejectReasons"
+                        [(ngModel)]="nachbearbeitungData.ablehnungsgrund"
+                        optionLabel="label"
+                        placeholder="{{ 'fuv.police.nachbearbeitung.waehlenSieEinenGrund' | translate }}"
+                        [showClear]="true"
+                        [disabled]="isVttRejected() || viewMode"
+                        (onChange)="onDataChange()"
+                        class="w-1/4"
+                    ></p-select>
+                </div>
+            </div>
+
+            <!-- Offerte policieren Section -->
+            <div class="border-t pt-6 space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">{{ 'fuv.police.nachbearbeitung.labels.offerteAbschliessen' | translate }}</h3>
+                    <button
+                        pButton
+                        type="button"
+                        [label]="'fuv.police.nachbearbeitung.buttons.offertePolicieren' | translate"
+                        icon="pi pi-check-circle"
+                        severity="success"
+                        size="large"
+                        (click)="offertePolicieren()"
+                        [disabled]="isPolicierenButtonDisabled()"
+                        [pTooltip]="policierenButtonTooltip()"
+                        [tooltipDisabled]="!isPolicierenButtonDisabled()"
+                        tooltipPosition="top"
+                    ></button>
+                </div>
+                <p class="text-sm text-gray-600">Wenn alle Daten vollständig erfasst sind und die Offerte unterschrieben wurde, kann die Offerte policiert werden.</p>
+            </div>
+        </div>
+    </p-panel>
+</div>
+
+<!-- Policierung Success Dialog -->
+<p-dialog [(visible)]="displayPolicierungDialog" [modal]="true" [closable]="false" [draggable]="false" [style]="{ width: '500px' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-semibold text-orange-600">Offerte policieren</span>
+    </ng-template>
+
+    <div class="flex items-start gap-3">
+        <i class="pi pi-exclamation-circle text-orange-500 text-3xl"></i>
+        <div>
+            <p class="text-base mb-2">Die Policierung wurde gestartet. Es kann bis zu 30 Minuten gehen, bis der neue Vertrag in Syrius angelegt ist. Wenn alles erfolgreich abgeschlossen ist, wird die Bestellung für die FUV Police ausgelöst.</p>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Ok" icon="pi pi-check" class="p-button-primary" (click)="closePolicierungDialog()"></button>
+    </ng-template>
+</p-dialog>

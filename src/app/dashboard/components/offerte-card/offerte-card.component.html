@@ -1,0 +1,53 @@
+<p-card *ngIf="permissions.canViewOfferten" class="mb-6">
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center p-4 pb-0">
+            <h2 class="text-xl font-semibold m-0">Meine Offerten</h2>
+            <p-tag [value]="offerten.length.toString()" severity="success" [rounded]="true"> </p-tag>
+        </div>
+    </ng-template>
+
+    <!-- No Offerten - Show Create Button -->
+    <div *ngIf="offerten.length === 0" class="text-center py-8">
+        <i class="pi pi-file-plus text-3xl mb-4 text-gray-400"></i>
+        <p class="text-gray-500 dark:text-gray-400 mb-4">Keine Offerten vorhanden</p>
+        <p-button *ngIf="permissions.canCreateOfferten" label="Neue Offerte erstellen" icon="pi pi-plus" (onClick)="onNavigateToOfferteCreation()" pTooltip="Partner suchen und neue Offerte erstellen"> </p-button>
+    </div>
+
+    <div class="space-y-3">
+        <div
+            *ngFor="let offerte of offerten; let last = last"
+            [class.border-b]="!last"
+            [class.border-gray-200]="!last"
+            [class.dark:border-gray-700]="!last"
+            [class.pb-3]="!last"
+            class="space-y-2 p-2 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-2 focus:outline-blue-500"
+            (click)="onNavigateToOfferteDetail(offerte.offertenNummer)"
+            (keydown.enter)="onNavigateToOfferteDetail(offerte.offertenNummer)"
+            (keydown.space)="onNavigateToOfferteDetail(offerte.offertenNummer)"
+            [pTooltip]="'Offerte ' + offerte.offertenNummer + ' öffnen'"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Offerte ' + offerte.offertenNummer + ' öffnen'"
+        >
+            <div class="flex justify-between items-start">
+                <div class="flex-1">
+                    <h4 class="font-medium text-gray-900 dark:text-white">{{ offerte.offertenNummer }}</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ offerte.kundenName }}</p>
+                </div>
+                <p-tag [value]="getOffertenStatusLabel(offerte.status)" [severity]="getOffertenStatusSeverity(offerte.status)" [rounded]="true"> </p-tag>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500 dark:text-gray-400">{{ getTimeAgo(offerte.createdDate) }}</span>
+                <span class="font-medium text-gray-900 dark:text-white">{{ offerte.amount | number: '1.0-0' }} {{ offerte.currency }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offerte Actions -->
+    <div *ngIf="offerten.length > 0" class="pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex gap-2">
+            <p-button *ngIf="permissions.canCreateOfferten" label="Neue Offerte" icon="pi pi-plus" size="small" class="flex-1" (onClick)="onNavigateToOfferteCreation()" pTooltip="Partner suchen und neue Offerte erstellen"> </p-button>
+            <p-button *ngIf="permissions.canViewOfferten" label="Alle anzeigen" icon="pi pi-search" size="small" severity="secondary" class="flex-1" (onClick)="onNavigateToOfferteSearch()" pTooltip="Offerten suchen und verwalten"> </p-button>
+        </div>
+    </div>
+</p-card>

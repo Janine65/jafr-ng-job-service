@@ -1,0 +1,95 @@
+<ng-container *ngIf="!isDialog; else dialogView">
+    <p-card [header]="'menu.fuv.searchBetrieb' | translate">
+        <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+    </p-card>
+</ng-container>
+
+<ng-template #dialogView>
+    <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+</ng-template>
+
+<ng-template #searchContent>
+    <div *ngIf="!selectedBetrieb">
+        <form #searchForm="ngForm" (ngSubmit)="onSubmit()" class="mb-5">
+            <p-panel [header]="'common.search.searchCriteria' | translate" [toggleable]="true" [(collapsed)]="searchCriteriaCollapsed">
+                <div class="flex flex-col md:flex-row md:flex-wrap gap-3 mb-4">
+                    <div class="flex flex-col flex-1">
+                        <label for="suvanr">{{ 'common.partner.suvanr' | translate }}</label>
+                        <input pInputText id="suvanr" type="text" [(ngModel)]="searchFormData.suvanr" name="suvanr" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('suvanr') }" />
+                        <small *ngIf="hasError('suvanr')" class="text-red-500">
+                            {{ getErrorMessage('suvanr') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="partnernr">{{ 'common.partner.partnernr' | translate }}</label>
+                        <input pInputText id="partnernr" type="text" [(ngModel)]="searchFormData.partnernr" name="partnernr" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('partnernr') }" />
+                        <small *ngIf="hasError('partnernr')" class="text-red-500">
+                            {{ getErrorMessage('partnernr') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="uidnr">{{ 'common.partner.uidNr' | translate }}</label>
+                        <input pInputText id="uidnr" type="text" [(ngModel)]="searchFormData.uidnr" name="uidnr" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('uidnr') }" />
+                        <small *ngIf="hasError('uidnr')" class="text-red-500">
+                            {{ getErrorMessage('uidnr') }}
+                        </small>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="name">{{ 'common.partner.name' | translate }}</label>
+                        <input pInputText id="name" type="text" [(ngModel)]="searchFormData.name" name="name" autocomplete="off" [ngClass]="{ 'p-invalid border-red-500': hasError('name') }" />
+                        <small *ngIf="hasError('name')" class="text-red-500">
+                            {{ getErrorMessage('name') }}
+                        </small>
+                    </div>
+                </div>
+                <small *ngIf="hasFormError()" class="text-red-500 block mb-2">
+                    {{ getFormErrorMessage() }}
+                </small>
+                <div class="flex gap-2 mt-4 items-center">
+                    <button pButton type="submit" [label]="'common.search.title' | translate" icon="pi pi-search"></button>
+                    <button pButton type="button" [label]="'common.search.recent' | translate" icon="pi pi-history" (click)="recentSearchesPopover.toggle($event)"></button>
+                    <button pButton type="button" [label]="'common.search.reset' | translate" icon="pi pi-filter-slash" class="p-button-outlined" (click)="resetForm()"></button>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <label for="searchLocalOnly" class="text-sm whitespace-nowrap">Nur in vorbereiteten Daten suchen</label>
+                        <p-toggleswitch [(ngModel)]="searchLocalOnly" inputId="searchLocalOnly" [ngModelOptions]="{ standalone: true }"></p-toggleswitch>
+                    </div>
+                    <p-popover #recentSearchesPopover>
+                        <ng-template pTemplate="content">
+                            <div *ngIf="recentSearches.length > 0; else noRecentSearches">
+                                <ul class="list-none p-0 m-0">
+                                    <li
+                                        *ngFor="let search of recentSearches"
+                                        class="p-2 hover:bg-gray-100 cursor-pointer flex align-items-center gap-2 group"
+                                        style="display: flex"
+                                        tabindex="0"
+                                        (click)="onRecentSearchSelect(search)"
+                                        (keydown)="($event.key === 'Enter' || $event.key === ' ') && onRecentSearchSelect(search)"
+                                    >
+                                        <span style="flex: 1">{{ search.name1 }}, {{ search.suvanr }}</span>
+                                        <i class="pi pi-times cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity" style="font-size: 1rem; color: #6c757d" (click)="removeRecentSearch(search, $event)" pTooltip="Eintrag entfernen"></i>
+                                    </li>
+                                </ul>
+                                <button pButton type="button" [label]="'common.search.clearHistory' | translate" icon="pi pi-trash" class="p-button-text mt-2" (click)="clearRecentSearches()"></button>
+                            </div>
+                            <ng-template #noRecentSearches>
+                                <div class="p-2">{{ 'common.search.noRecentSearches' | translate }}</div>
+                            </ng-template>
+                        </ng-template>
+                    </p-popover>
+                </div>
+            </p-panel>
+        </form>
+        <div *ngIf="searchStarted && validationErrors.size === 0 && !selectedBetrieb">
+            <syr-data-table-panel
+                [panelHeader]="'common.search.results' | translate"
+                [panelToggleable]="true"
+                [data]="searchResults"
+                [columnDefs]="betriebColumnDefs"
+                [config]="betriebTableConfig"
+                [loading]="betriebSearchLoading"
+                (rowSelected)="onBetriebSelect($event)"
+            >
+            </syr-data-table-panel>
+        </div>
+    </div>
+</ng-template>

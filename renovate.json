@@ -1,0 +1,12 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "local>SCSYRIUS/syr-renovate//presets/language/language_python",
+        "local>SCSYRIUS/syr-renovate//presets/language/language_angular",
+        "local>SCSYRIUS/syr-renovate//presets/language/language_golang",
+        "local>SCSYRIUS/syr-renovate//presets/pr/pull_requests_grouped",
+        "local>SCSYRIUS/syr-renovate//presets/schedule/schedule_at_first_of_month",
+        "local>SCSYRIUS/syr-renovate//presets/branch/branch_strategy_manual",
+        "local>SCSYRIUS/syr-renovate//presets/range/range_strategy_pin"
+    ]
+}

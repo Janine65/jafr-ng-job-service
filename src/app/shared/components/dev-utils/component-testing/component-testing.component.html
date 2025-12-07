@@ -1,0 +1,93 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Application</div>
+            <p-button label="Reload Application (Force)" icon="pi pi-replay" class="p-button-warning" (click)="reloadApplication()"></p-button>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Status Pages</div>
+            <div class="flex flex-wrap gap-2">
+                <p-button label="Show 403" class="p-button-warning" (click)="showStatusPage('403')"></p-button>
+                <p-button label="Show 404" class="p-button-danger" (click)="showStatusPage('404')"></p-button>
+                <p-button label="Show 500" class="p-button-danger" (click)="showStatusPage('500')"></p-button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Logger Settings</div>
+            <div class="field">
+                <p-splitButton id="logLevel" [label]="'Current Level: ' + logLevel" [model]="logLevelMenuItems" class="p-button-secondary"></p-splitButton>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Error Simulation</div>
+            <p-splitButton [label]="mockError.enabled ? 'Mock Error: Active' : 'Mock Error: Inactive'" (onClick)="toggleMockError()" [model]="mockErrorMenuItems" [class]="mockError.enabled ? 'p-button-danger' : 'p-button-secondary'"></p-splitButton>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Loading Page</div>
+            <div class="flex flex-wrap gap-2">
+                <p-button label="Force Show" icon="pi pi-eye" class="p-button-success" (click)="forceShowLoading()"></p-button>
+                <p-button label="Show for 10s" icon="pi pi-clock" class="p-button-info" (click)="showLoadingForDuration()"></p-button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Dark Mode Testing</div>
+            <div class="mb-3">
+                <div class="flex flex-wrap gap-2 align-items-center mb-2">
+                    <span class="font-semibold">Auto Dark Mode:</span>
+                    <span [class]="autoDarkModeEnabled ? 'text-green-500' : 'text-red-500'">
+                        {{ autoDarkModeEnabled ? 'Enabled ✓' : 'Disabled ✗' }}
+                    </span>
+                    <p-button [label]="autoDarkModeEnabled ? 'Disable' : 'Enable'" [class]="autoDarkModeEnabled ? 'p-button-sm p-button-warning' : 'p-button-sm p-button-success'" (click)="toggleAutoDarkMode()"> </p-button>
+                </div>
+                <div class="flex flex-wrap gap-2 align-items-center mb-2">
+                    <span class="font-semibold">OS Preference:</span>
+                    <span [class]="osDarkModePreference ? 'text-blue-500' : 'text-orange-500'">
+                        {{ osDarkModePreference ? 'Dark 🌙' : 'Light ☀️' }}
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-2 align-items-center" *ngIf="darkModeTestActive">
+                    <span class="font-semibold text-yellow-600">Test Active:</span>
+                    <span class="text-yellow-600"> Simulating {{ darkModeTestValue ? 'Dark' : 'Light' }} Mode </span>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-6">
+                <p-button label="Force Dark Mode" icon="pi pi-moon" class="p-button-info" (click)="forceDarkMode()"> </p-button>
+                <p-button label="Force Light Mode" icon="pi pi-sun" class="p-button-warning" (click)="forceLightMode()"> </p-button>
+                <p-button label="Restore OS Preference" icon="pi pi-refresh" class="p-button-secondary" (click)="restoreOSPreference()"> </p-button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-xl text-900 mb-3">Banner Service Testing</div>
+            <div class="mb-3">
+                <div class="font-semibold mb-2">Show Different Banner Types:</div>
+                <div class="flex flex-wrap gap-2">
+                    <p-button label="Error Banner" icon="pi pi-times-circle" class="p-button-danger" (click)="testErrorBanner()"></p-button>
+                    <p-button label="Warning Banner" icon="pi pi-exclamation-triangle" class="p-button-warning" (click)="testWarningBanner()"></p-button>
+                    <p-button label="Info Banner" icon="pi pi-info-circle" class="p-button-info" (click)="testInfoBanner()"></p-button>
+                    <p-button label="Success Banner" icon="pi pi-check-circle" class="p-button-success" (click)="testSuccessBanner()"></p-button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="font-semibold mb-2">Error Banner Trigger (5 errors):</div>
+                <p-button label="Trigger Error Banner" icon="pi pi-bolt" class="p-button-danger" (click)="triggerErrorBanner()"></p-button>
+                <small class="block mt-2 text-600">Simulates 5 backend errors to automatically trigger the service störung banner</small>
+            </div>
+            <div>
+                <div class="font-semibold mb-2">Hide Banner:</div>
+                <p-button label="Hide Current Banner" icon="pi pi-eye-slash" class="p-button-secondary" (click)="hideBanner()"></p-button>
+            </div>
+        </div>
+    </div>
+</div>

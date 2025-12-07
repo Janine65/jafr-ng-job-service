@@ -1,0 +1,71 @@
+<ng-container *ngIf="!isDialog; else dialogView">
+    <p-card [header]="'inex.regress.title' | translate" class="mb-5">
+        <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+    </p-card>
+</ng-container>
+
+<ng-template #dialogView>
+    <ng-container *ngTemplateOutlet="searchContent"></ng-container>
+</ng-template>
+
+<ng-template #searchContent>
+    <div>
+        <!-- Description -->
+        <div class="mb-4">
+            <p class="text-base">
+                {{ 'inex.regress.description' | translate }}
+            </p>
+        </div>
+
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+            <p-panel [header]="'common.search.searchCriteria' | translate" [toggleable]="true" [(collapsed)]="searchCriteriaCollapsed">
+                <div class="flex flex-col md:flex-row md:flex-wrap gap-3">
+                    <div class="flex flex-col flex-0">
+                        <label for="schadenNr">{{ 'inex.regress.schadennr' | translate }}</label>
+                        <input
+                            pInputText
+                            id="schadenNr"
+                            type="text"
+                            formControlName="schadenNr"
+                            (input)="onSchadenNrInput($event)"
+                            (paste)="onSchadenNrPaste($event)"
+                            placeholder="25.12340.20.5"
+                            maxlength="13"
+                            [ngClass]="{ 'p-invalid border-red-500': isFieldInvalid('schadenNr') }"
+                        />
+                        <div *ngIf="searchForm.get('schadenNr')?.invalid && (searchForm.get('schadenNr')?.touched || submitted)" class="text-red-500 text-xs mt-1">
+                            {{ getValidationErrorMessage('schadenNr') }}
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="submitted && searchForm.invalid" class="text-red-500 mb-2">
+                    {{ getValidationErrorMessage() }}
+                </div>
+                <div class="flex gap-2 mt-4">
+                    <button pButton type="submit" [label]="'common.search.title' | translate" icon="pi pi-search"></button>
+                    <button pButton type="button" [label]="'common.search.reset' | translate" icon="pi pi-filter-slash" class="p-button-outlined" (click)="resetForm()"></button>
+                </div>
+            </p-panel>
+        </form>
+
+        <!-- Results Section  -->
+        <div *ngIf="searchStarted && searchForm.valid" class="mt-4">
+            <!-- Actions Panel (separate, above data table) -->
+            <syr-data-table-actions-panel header="common.actions.title" [actions]="actionButtons" [showExport]="true" exportLabel="common.actions.export" [exportMenuItems]="exportMenuItems" [toggleable]="true"> </syr-data-table-actions-panel>
+
+            <!-- Data Table Panel -->
+            <syr-data-table-panel
+                [panelHeader]="'inex.regress.results' | translate"
+                [panelToggleable]="true"
+                [data]="searchResults"
+                [columnDefs]="regressColumnDefs"
+                [config]="regressTableConfig"
+                [loading]="regressSearchLoading"
+                [(selection)]="selectedRows"
+                (selectionChange)="onSelectionChange($event)"
+                (filteredData)="onFilteredDataChange($event)"
+            >
+            </syr-data-table-panel>
+        </div>
+    </div>
+</ng-template>

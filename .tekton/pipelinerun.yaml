@@ -1,0 +1,83 @@
+# This file is used to create a pipeline run in openshift/tekton.
+# Notes:
+# - Variables in curly braces are automaitcally replaced by openshift/tekton. No need to replace them manually.
+# - Variables in angle brackets are placeholders. They need to be replaced manually.
+# - For a complete list of available variables, see: https://tekton-hub.apps.suvanet.ch/suva/pipeline/image-build-deploy-suva
+
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: "syr-kpm-ng-frontend-{{revision}}-"
+  annotations:
+    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/on-target-branch: "[refs/tags/*]"
+    pipelinesascode.tekton.dev/pipeline: ".tekton/pipelines/angular-build-deploy-suva.yaml"
+    pipelinesascode.tekton.dev/max-keep-runs: "3"
+spec:
+  pipelineRef:
+    name: angular-build-deploy-suva
+  serviceAccountName: pipeline
+  podTemplate:
+    nodeSelector:
+      node-role.kubernetes.io/appinfra: ""
+    tolerations:
+      - key: appinfra
+        effect: NoExecute
+        value: reserved
+  params:
+    - name: git-url
+      value: "ssh://git@git.suvanet.ch/scsyrius/syr-kpm-ng-frontend.git"
+    - name: git-revision
+      value: "{{target_branch}}"
+    - name: target-image
+      value: "harbor.suvanet.ch/galaxy-intern/syr-kpm-ng-frontend"
+    - name: git-url-infra
+      value: "ssh://git@git.suvanet.ch/scsyrius-infra/syr-kpm-ng-infra.git"
+    - name: sonar-project-key
+      value: "openshift:syr-kpm-ng-frontend"
+    - name: kustomize-lowest-stage
+      value: "dev"
+    - name: commit-id
+      value: "{{revision}}"
+    - name: repo-name
+      value: "{{repo_name}}"
+    - name: actor-name
+      value: "{{sender}}"
+    - name: repo-browser-link
+      value: "{{repo_url}}"
+    - name: notify-when-pipeline-status-is
+      value: []
+  workspaces:
+    - name: source-app
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: hnas-nfs-csi-sc
+    - name: source-infra
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: hnas-nfs-csi-sc
+    - name: image
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: hnas-nfs-csi-sc
+    - name: ca-directory
+      configMap:
+        name: suva-ca
+    - name: ssh-directory
+      secret:
+        secretName: bitbucket-key

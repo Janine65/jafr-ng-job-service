@@ -1,0 +1,469 @@
+<div class="w-full">
+    <!-- Modal Mode: Show questions directly without wrapper -->
+    <div *ngIf="isModalMode" class="space-y-6" data-sensitive>
+        <!-- Validation Error Messages (inside modal) -->
+        <div *ngIf="validationErrors.length > 0" class="p-4 bg-red-50 border-l-4 border-red-500 rounded">
+            <div class="flex items-start gap-3">
+                <i class="pi pi-exclamation-triangle text-red-500 text-2xl mt-1"></i>
+                <div class="flex-1">
+                    <h3 class="text-red-800 font-semibold mb-2">{{ 'fuv.police.antragsfragen.validation.fillRequired' | translate }}</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li *ngFor="let error of validationErrors" class="text-red-700 text-sm">{{ error }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading()" class="text-center py-8">
+            <i class="pi pi-spin pi-spinner text-4xl text-primary-500 mb-4"></i>
+            <p class="text-lg font-medium text-gray-700">{{ loadingMessageKey() | translate }}</p>
+            <p class="text-sm text-gray-500 mt-2">{{ 'fuv.police.antragsfragen.loading.pleaseWait' | translate }}</p>
+        </div>
+
+        <!-- No Permission Message -->
+        <div *ngIf="!isLoading() && !hasAnyPermission()" class="p-6 text-center">
+            <div class="flex flex-col items-center gap-4">
+                <i class="pi pi-lock text-gray-400 text-6xl"></i>
+                <h3 class="text-xl font-semibold text-gray-700">{{ 'fuv.police.antragsfragen.permissions.noPermission' | translate }}</h3>
+                <p class="text-gray-600">{{ 'fuv.police.antragsfragen.permissions.noAccessMessage' | translate }}</p>
+            </div>
+        </div>
+
+        <!-- Info message for read-only mode -->
+        <div *ngIf="!isLoading() && hasAnyPermission() && (viewMode || (!canUpdateAntragsfragen() && canReadAntragsfragen()))" class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+            <div class="flex items-start gap-3">
+                <i class="pi pi-info-circle text-blue-500 text-xl"></i>
+                <div>
+                    <h4 class="font-semibold text-blue-900 mb-1">{{ 'fuv.police.antragsfragen.permissions.readOnly' | translate }}</h4>
+                    <p class="text-blue-700 text-sm">{{ 'fuv.police.antragsfragen.permissions.readOnlyMessage' | translate }}{{ viewMode ? '.' : ', da keine Berechtigung zum Bearbeiten vorhanden ist.' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Questions (loaded dynamically from fragen.service.ts) -->
+        <div *ngIf="!isLoading() && hasAnyPermission()">
+            <div
+                *ngFor="let frage of antragsfragen; let i = index"
+                class="bg-white border-l-4 rounded-lg shadow-sm hover:shadow-md transition-shadow mb-4"
+                [class.border-green-500]="frage.antwort === 'ja'"
+                [class.border-gray-300]="frage.antwort !== 'ja'"
+            >
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-base font-semibold text-gray-900 flex items-center">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-sm font-bold mr-3">{{ i + 1 }}</span>
+                            {{ frage.frageText }}
+                        </h3>
+                        <div class="flex space-x-3">
+                            <label class="flex items-center space-x-2 cursor-pointer px-4 py-2 rounded-lg transition-colors" [class.bg-gray-100]="frage.antwort === 'nein'" [class.hover:bg-gray-50]="frage.antwort !== 'nein'">
+                                <p-radioButton [name]="'frage' + (i + 1)" value="nein" [(ngModel)]="frage.antwort" (onChange)="onDataChange(frage)" [disabled]="isFieldDisabled()"></p-radioButton>
+                                <span class="text-sm font-medium">{{ 'common.no' | translate }}</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer px-4 py-2 rounded-lg transition-colors" [class.bg-green-100]="frage.antwort === 'ja'" [class.hover:bg-green-50]="frage.antwort !== 'ja'">
+                                <p-radioButton [name]="'frage' + (i + 1)" value="ja" [(ngModel)]="frage.antwort" (onChange)="onDataChange(frage)" [disabled]="isFieldDisabled()"></p-radioButton>
+                                <span class="text-sm font-medium">{{ 'common.yes' | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 mt-4" *ngIf="frage.antwort === 'ja'">
+                        <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'fuv.police.antragsfragen.labels.ifYesWhich' | translate }}</label>
+                            <textarea
+                                pInputTextarea
+                                [(ngModel)]="frage.details"
+                                rows="3"
+                                class="w-full"
+                                [placeholder]="'fuv.police.antragsfragen.placeholders.pleaseProvideDetails' | translate"
+                                (ngModelChange)="onDataChange(frage)"
+                                [disabled]="isFieldDisabled()"
+                            ></textarea>
+                        </div>
+
+                        <!-- Special handling for frage1: behandlung question -->
+                        <div *ngIf="frage.behandlung !== undefined" class="bg-green-50 rounded-lg p-4 border border-green-200">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'fuv.police.antragsfragen.labels.warenSieDeshalbInBehandlung' | translate }}</label>
+                            <div class="flex space-x-3">
+                                <label
+                                    class="flex items-center space-x-2 cursor-pointer px-4 py-2 rounded-lg bg-white border transition-colors"
+                                    [class.border-green-500]="frage.behandlung === 'nein'"
+                                    [class.hover:border-gray-400]="frage.behandlung !== 'nein'"
+                                >
+                                    <p-radioButton [name]="'frage' + (i + 1) + 'b'" value="nein" [(ngModel)]="frage.behandlung" (onChange)="onDataChange(frage)" [disabled]="isFieldDisabled()"></p-radioButton>
+                                    <span class="text-sm font-medium">{{ 'common.no' | translate }}</span>
+                                </label>
+                                <label
+                                    class="flex items-center space-x-2 cursor-pointer px-4 py-2 rounded-lg bg-white border transition-colors"
+                                    [class.border-green-500]="frage.behandlung === 'ja'"
+                                    [class.hover:border-gray-400]="frage.behandlung !== 'ja'"
+                                >
+                                    <p-radioButton [name]="'frage' + (i + 1) + 'b'" value="ja" [(ngModel)]="frage.behandlung" (onChange)="onDataChange(frage)" [disabled]="isFieldDisabled()"></p-radioButton>
+                                    <span class="text-sm font-medium">{{ 'common.yes' | translate }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex justify-end gap-3 mt-6">
+                <button pButton type="button" [label]="'common.actions.close' | translate" class="p-button-secondary" (click)="closeQuestionsModal()"></button>
+                <button *ngIf="canUpdateAntragsfragen() && !viewMode" pButton type="button" [label]="'common.actions.save' | translate" class="p-button-primary" (click)="saveAntragsfragen()"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Mode: Show info box + buttons + dialog wrapper -->
+    <div *ngIf="!isModalMode">
+        <p-panel header="{{ 'fuv.police.steps.antragsfragen' | translate }}" [toggleable]="false">
+            <!-- Validation Error Messages -->
+            <div *ngIf="validationErrors.length > 0" class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+                <div class="flex items-start gap-3">
+                    <i class="pi pi-exclamation-triangle text-red-500 text-2xl mt-1"></i>
+                    <div class="flex-1">
+                        <h3 class="text-red-800 font-semibold mb-2">{{ 'fuv.police.antragsfragen.validation.fillRequired' | translate }}</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li *ngFor="let error of validationErrors" class="text-red-700 text-sm">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mark this entire component as sensitive to prevent screenshots -->
+            <div data-sensitive>
+                <!-- Loading State (includes permission check) -->
+                <div *ngIf="isLoading()" class="text-center py-8">
+                    <i class="pi pi-spin pi-spinner text-4xl text-primary-500 mb-4"></i>
+                    <p class="text-lg font-medium text-gray-700">{{ loadingMessageKey() | translate }}</p>
+                    <p class="text-sm text-gray-500 mt-2">{{ 'fuv.police.antragsfragen.loading.pleaseWait' | translate }}</p>
+                </div>
+
+                <!-- No Permission Message -->
+                <div *ngIf="!isLoading() && !hasAnyPermission()" class="p-6 text-center">
+                    <div class="flex flex-col items-center gap-4">
+                        <i class="pi pi-lock text-gray-400 text-6xl"></i>
+                        <h3 class="text-xl font-semibold text-gray-700">{{ 'fuv.police.antragsfragen.permissions.noPermission' | translate }}</h3>
+                        <p class="text-gray-600">{{ 'fuv.police.antragsfragen.permissions.noAccessMessage' | translate }}</p>
+                    </div>
+                </div>
+
+                <!-- Content (visible if user has any permission and data is loaded) -->
+                <div *ngIf="!isLoading() && hasAnyPermission()" class="space-y-6">
+                    <!-- Summary Section -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0">
+                                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'fuv.police.antragsfragen.summary.title' | translate }}</h3>
+                                <div class="flex gap-4">
+                                    <div class="bg-white rounded-lg p-3 shadow-sm flex-1">
+                                        <div class="text-xs text-gray-500 mb-1">{{ 'fuv.police.antragsfragen.summary.recordedOn' | translate }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ aufgenommenAm }}</div>
+                                    </div>
+                                    <div class="bg-white rounded-lg p-3 shadow-sm flex-1">
+                                        <div class="text-xs text-gray-500 mb-1">{{ 'fuv.police.antragsfragen.summary.changedOn' | translate }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ geaendertAm }}</div>
+                                    </div>
+                                    <div class="bg-white rounded-lg p-3 shadow-sm flex-1">
+                                        <div class="text-xs text-gray-500 mb-1">{{ 'fuv.police.antragsfragen.summary.answered' | translate }}</div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex items-center space-x-1">
+                                                <span class="text-green-600 font-semibold">{{ summaryCounts().yes }}</span>
+                                                <span class="text-xs text-gray-600">{{ 'common.yes' | translate }}</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <span class="text-gray-600 font-semibold">{{ summaryCounts().no }}</span>
+                                                <span class="text-xs text-gray-600">{{ 'common.no' | translate }}</span>
+                                            </div>
+                                            <div *ngIf="summaryCounts().unanswered > 0" class="flex items-center space-x-1">
+                                                <span class="text-orange-500 font-semibold">{{ summaryCounts().unanswered }}</span>
+                                                <span class="text-xs text-orange-600">{{ 'fuv.police.antragsfragen.summary.open' | translate }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="vttStatusVisible()" class="bg-white rounded-lg p-4 shadow-sm flex-1">
+                                        <div class="text-xs text-gray-500 mb-2">{{ 'fuv.police.antragsfragen.labels.taskForVtt' | translate }}</div>
+                                        <div class="text-sm font-medium" [ngClass]="assessmentStatusColor">
+                                            <div class="flex items-center gap-2">
+                                                <i [class]="assessmentStatusIcon"></i>
+                                                <span>{{ assessmentStatusLabel }}</span>
+
+                                                <!-- Info icon with tooltip - only shown when there's a VTT response and user has read permission -->
+                                                <i *ngIf="hasAssessment && canReadAntragsfragen()" class="pi pi-info-circle text-gray-400 cursor-help" [pTooltip]="vttDetailsTooltip" tooltipPosition="top" [escape]="false"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons to Open Questions Modal -->
+                    <div class="border-top-1 border-200 pt-3 mt-3">
+                        <div class="flex justify-center gap-3">
+                            <!-- View Button (shown if can read) -->
+                            <button *ngIf="canReadAntragsfragen()" pButton type="button" [label]="'fuv.police.antragsfragen.buttons.viewQuestions' | translate" icon="pi pi-eye" class="p-button-secondary" (click)="toggleQuestions(true)"></button>
+
+                            <!-- Edit Button (shown if can update AND not in viewMode) -->
+                            <button *ngIf="canActuallyUpdateAntragsfragen()" pButton type="button" [label]="'common.actions.edit' | translate" icon="pi pi-pencil" class="p-button-primary" (click)="toggleQuestions(false)"></button>
+
+                            <!-- VTT Beurteilung Button (shown if VTT task exists AND user has update permission AND not in viewMode) -->
+                            <button
+                                *ngIf="hasVttTask() && canActuallyUpdateAntragsfragen()"
+                                pButton
+                                type="button"
+                                [label]="'fuv.police.antragsfragen.buttons.vttBeurteilung' | translate"
+                                icon="pi pi-check"
+                                class="p-button-primary"
+                                (click)="onVttBeurteilungClick()"
+                                [pTooltip]="'fuv.police.antragsfragen.buttons.vttBeurteilungTooltip' | translate"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+    <!-- End of embedded mode wrapper -->
+</div>
+
+<!-- VTT Dialogs (outside of mode-specific sections so they work in both modal and embedded mode) -->
+<!-- VTT Task Creation Dialog -->
+<p-dialog [(visible)]="showVttDialog" [modal]="true" [closable]="false" [draggable]="false" [resizable]="false" [baseZIndex]="10000" [appendTo]="'body'" class="max-w-2xl">
+    <ng-template pTemplate="header">
+        <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                <i class="pi pi-question-circle text-gray-600 text-3xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-orange-500">{{ 'fuv.police.tasks.createVttTask' | translate }}</h2>
+        </div>
+    </ng-template>
+
+    <div class="py-4">
+        <p class="text-gray-700 leading-relaxed">
+            {{ 'fuv.police.antragsfragen.vttDialog.message' | translate }}
+        </p>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-center gap-3">
+            <button pButton type="button" [label]="'fuv.police.antragsfragen.buttons.confirmVttTask' | translate" class="p-button-primary" style="background-color: #00bcd4; border-color: #00bcd4" (click)="onVttDialogConfirm()"></button>
+            <button pButton type="button" [label]="'fuv.police.antragsfragen.buttons.cancelVttTask' | translate" class="p-button-outlined" (click)="onVttDialogCancel()"></button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!-- Task Creation Form Dialog -->
+<p-dialog
+    [header]="(isEditingTask() ? 'fuv.police.tasks.editTask' : 'fuv.police.tasks.createTask') | translate"
+    [(visible)]="showTaskCreationDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [baseZIndex]="11000"
+    [appendTo]="'body'"
+    [style]="{ width: '50vw', minWidth: '600px' }"
+    (onHide)="onTaskCreationCancel()"
+>
+    <div class="space-y-4 py-4">
+        <!-- Aufgabeart -->
+        <div class="flex flex-col gap-2">
+            <label for="aufgabeart" class="font-medium text-gray-700">{{ 'fuv.police.tasks.taskType' | translate }}</label>
+            <p-select id="aufgabeart" [(ngModel)]="taskData.aufgabeart" [options]="aufgabenartOptions" optionLabel="label" optionValue="value" [style]="{ width: '100%' }" [showClear]="true" (onChange)="onAufgabenartChange()"></p-select>
+        </div>
+
+        <!-- Titel der Aufgabe -->
+        <div class="flex flex-col gap-2">
+            <label for="titel" class="font-medium text-gray-700">Titel der Aufgabe</label>
+            <input pInputText id="titel" [(ngModel)]="taskData.titel" class="w-full" style="border-color: #00bcd4" />
+        </div>
+
+        <!-- Fällig am -->
+        <div class="flex flex-col gap-2">
+            <label for="faelligAm" class="font-medium text-gray-700">Fällig am</label>
+            <input pInputText id="faelligAm" [(ngModel)]="taskData.faelligAm" class="w-full" placeholder="dd.mm.yyyy" />
+        </div>
+
+        <!-- Zugewiesen an -->
+        <div class="flex flex-col gap-2">
+            <label for="zugewiesenAn" class="font-medium text-gray-700">Zugewiesen an</label>
+            <p-select id="zugewiesenAn" [(ngModel)]="taskData.zugewiesenAn" [options]="zugewiesenAnOptions" optionLabel="label" optionValue="value" [style]="{ width: '100%' }"></p-select>
+        </div>
+
+        <!-- Beschreibung -->
+        <div class="flex flex-col gap-2">
+            <label for="beschreibung" class="font-medium text-gray-700">Beschreibung</label>
+            <textarea pInputTextarea id="beschreibung" [(ngModel)]="taskData.beschreibung" rows="4" class="w-full"></textarea>
+        </div>
+
+        <!-- Automatische Beschreibung -->
+        <div class="flex flex-col gap-2">
+            <label for="automatischeBeschreibung" class="font-medium text-gray-700">Automatische Beschreibung</label>
+            <textarea pInputTextarea id="automatischeBeschreibung" [(ngModel)]="taskData.automatischeBeschreibung" rows="6" class="w-full bg-gray-50" [readonly]="true"></textarea>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-start gap-2">
+            <button
+                pButton
+                type="button"
+                [label]="(isEditingTask() ? 'fuv.police.tasks.updateTask' : 'fuv.police.tasks.createTask') | translate"
+                class="p-button-primary"
+                style="background-color: #00bcd4; border-color: #00bcd4"
+                (click)="onTaskCreationSave()"
+            ></button>
+            <button pButton type="button" [label]="'common.actions.cancel' | translate" class="p-button-outlined" (click)="onTaskCreationCancel()"></button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!-- VTT Beurteilung Dialog -->
+<p-dialog
+    header="VTT Beurteilung"
+    [(visible)]="showVttBeurteilungDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [baseZIndex]="10000"
+    [appendTo]="'body'"
+    [style]="{ width: '800px', maxHeight: '90vh' }"
+    (onHide)="closeVttBeurteilungDialog()"
+>
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-4">
+        <nav class="flex gap-4">
+            <button
+                type="button"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors"
+                [class.border-primary]="vttBeurteilungActiveTab === 0"
+                [class.text-primary]="vttBeurteilungActiveTab === 0"
+                [class.border-transparent]="vttBeurteilungActiveTab !== 0"
+                [class.text-gray-500]="vttBeurteilungActiveTab !== 0"
+                (click)="vttBeurteilungActiveTab = 0"
+            >
+                VTT Beurteilung
+            </button>
+            <button
+                type="button"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors"
+                [class.border-primary]="vttBeurteilungActiveTab === 1"
+                [class.text-primary]="vttBeurteilungActiveTab === 1"
+                [class.border-transparent]="vttBeurteilungActiveTab !== 1"
+                [class.text-gray-500]="vttBeurteilungActiveTab !== 1"
+                (click)="vttBeurteilungActiveTab = 1"
+            >
+                Aufgabe in Syrius
+            </button>
+        </nav>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="py-4">
+        <!-- Tab 1: VTT Beurteilung -->
+        <div *ngIf="vttBeurteilungActiveTab === 0" class="space-y-4">
+            <!-- Beurteilungsart -->
+            <div class="flex flex-col gap-2">
+                <label for="beurteilungsart" class="font-medium text-gray-700">{{ 'fuv.police.antragsfragen.vttDialog.beurteilungsart' | translate }}</label>
+                <p-select
+                    id="beurteilungsart"
+                    [(ngModel)]="vttBeurteilung.beurteilungsart"
+                    [options]="beurteilungsartOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [placeholder]="'common.placeholders.pleaseSelect' | translate"
+                    [style]="{ width: '100%' }"
+                ></p-select>
+            </div>
+
+            <!-- Bemerkung zur Beurteilung -->
+            <div class="flex flex-col gap-2">
+                <label for="beurteilung-bemerkung" class="font-medium text-gray-700">{{ 'fuv.police.antragsfragen.vttDialog.bemerkungZurBeurteilung' | translate }}</label>
+                <textarea pInputTextarea id="beurteilung-bemerkung" [(ngModel)]="vttBeurteilung.bemerkung" rows="4" [placeholder]="'fuv.police.antragsfragen.vttDialog.bemerkungPlaceholder' | translate" class="w-full"></textarea>
+            </div>
+        </div>
+
+        <!-- Tab 2: Aufgabe in Syrius -->
+        <div *ngIf="vttBeurteilungActiveTab === 1" class="flex flex-col h-full">
+            <!-- Loading spinner -->
+            <div *ngIf="isLoadingAufgabeDetails" class="flex items-center justify-center p-8">
+                <i class="pi pi-spin pi-spinner text-3xl text-primary"></i>
+            </div>
+
+            <!-- Aufgabe details -->
+            <div *ngIf="!isLoadingAufgabeDetails && aufgabeDetails && aufgabeDetails.length > 0" class="space-y-3 flex-1">
+                <!-- Display first task from array -->
+                <ng-container *ngIf="aufgabeDetails[0] as task">
+                    <!-- Nr. -->
+                    <div class="grid grid-cols-[200px_1fr] gap-4 border-b border-gray-200 pb-2">
+                        <div class="font-medium text-gray-600">Nr.</div>
+                        <div>{{ task.nr || '-' }}</div>
+                    </div>
+
+                    <!-- Beschreibung/Text -->
+                    <div class="grid grid-cols-[200px_1fr] gap-4 border-b border-gray-200 pb-2">
+                        <div class="font-medium text-gray-600">{{ 'fuv.police.antragsfragen.aufgabe.beschreibung' | translate }}</div>
+                        <div style="white-space: pre-wrap">{{ task.text || '-' }}</div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="grid grid-cols-[200px_1fr] gap-4 border-b border-gray-200 pb-2">
+                        <div class="font-medium text-gray-600">{{ 'fuv.police.antragsfragen.aufgabe.status' | translate }}</div>
+                        <div>{{ task.status || '-' }}</div>
+                    </div>
+
+                    <!-- Organisationseinheit -->
+                    <div class="grid grid-cols-[200px_1fr] gap-4 border-b border-gray-200 pb-2">
+                        <div class="font-medium text-gray-600">{{ 'fuv.police.antragsfragen.aufgabe.organisationseinheit' | translate }}</div>
+                        <div>{{ task.oebezeichnung || '-' }}</div>
+                    </div>
+
+                    <!-- Zugewiesen an -->
+                    <div class="grid grid-cols-[200px_1fr] gap-4 border-b border-gray-200 pb-2">
+                        <div class="font-medium text-gray-600">{{ 'fuv.police.antragsfragen.aufgabe.zugewiesenAn' | translate }}</div>
+                        <div>{{ task.userbezeichnung || '-' }}</div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- No data message -->
+            <div *ngIf="!isLoadingAufgabeDetails && (!aufgabeDetails || aufgabeDetails.length === 0)" class="flex items-center justify-center p-8 text-gray-500">{{ 'fuv.police.antragsfragen.aufgabe.noDetails' | translate }}</div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-between w-full">
+            <!-- Left side: Aufgabe in Syrius button (only shown on tab 1 when details are loaded) -->
+            <div>
+                <button
+                    *ngIf="vttBeurteilungActiveTab === 1 && !isLoadingAufgabeDetails && aufgabeDetails"
+                    pButton
+                    type="button"
+                    [label]="'fuv.police.tasks.openInSyrius' | translate"
+                    icon="pi pi-external-link"
+                    class="p-button-outlined"
+                    (click)="openInSyrius()"
+                ></button>
+            </div>
+
+            <!-- Right side: Speichern and Schliessen buttons -->
+            <div class="flex gap-2">
+                <button pButton type="button" [label]="'common.actions.save' | translate" class="p-button-primary" (click)="onVttBeurteilungSave()"></button>
+                <button pButton type="button" [label]="'common.actions.close' | translate" class="p-button-outlined" (click)="closeVttBeurteilungDialog()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

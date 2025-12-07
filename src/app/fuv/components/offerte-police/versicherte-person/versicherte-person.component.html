@@ -1,0 +1,111 @@
+<div class="w-full">
+    <p-panel header="{{ 'fuv.police.steps.person' | translate }}" [toggleable]="false">
+        <div *ngIf="!person()" class="min-h-[200px] flex items-center justify-center">
+            <p-button icon="pi pi-search" [disabled]="viewMode()" (click)="showSearchDialog()" label="{{ 'fuv.police.versichertePerson.searchPerson' | translate }}"></p-button>
+        </div>
+
+        <div *ngIf="person() as selectedPerson">
+            <!-- Action buttons row -->
+            <div class="flex items-center gap-2 mb-4">
+                <button pButton type="button" [label]="'common.services.crm' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrm()"></button>
+                <button pButton type="button" [label]="'common.services.syrius' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenSyrius()"></button>
+                <button pButton type="button" [label]="'common.services.idms' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenIdms()"></button>
+                <button pButton type="button" [label]="'common.services.crif' | translate" icon="pi pi-external-link" class="p-button-outlined p-button-sm" (click)="onOpenCrif()"></button>
+            </div>
+
+            <!-- Visual Delimiter -->
+            <div class="border-t border-gray-300 mb-6 mt-4"></div>
+
+            <!-- Person form data -->
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Left Column -->
+                <div class="space-y-4">
+                    <!-- Name -->
+                    <div class="space-y-1">
+                        <label for="name" class="block text-sm font-medium text-gray-600">{{ 'common.partner.name' | translate }}</label>
+                        <input pInputText id="name" [value]="selectedPerson.name" disabled class="w-full !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Strasse and Nr. -->
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-gray-600">{{ 'common.partner.strasse' | translate }}</label>
+                        <div class="flex gap-2">
+                            <input pInputText [value]="selectedPerson.strasse || ''" disabled class="flex-1 !bg-gray-50 !cursor-not-allowed" />
+                            <input pInputText [value]="selectedPerson.hausnr || ''" disabled class="w-16 !bg-gray-50 !cursor-not-allowed" />
+                        </div>
+                    </div>
+
+                    <!-- Geburtsdatum -->
+                    <div class="space-y-1">
+                        <label for="geburtsdatum" class="block text-sm font-medium text-gray-600">{{ 'common.partner.geburtstag' | translate }}</label>
+                        <input pInputText id="geburtsdatum" [value]="selectedPerson.geburtstag | date: 'dd.MM.yyyy'" disabled class="w-32 !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Geschlecht -->
+                    <div class="space-y-1">
+                        <label for="geschlecht" class="block text-sm font-medium text-gray-600">{{ 'fuv.police.versichertePerson.geschlecht' | translate }}</label>
+                        <input pInputText id="geschlecht" [value]="selectedPerson.geschlecht || '' | titlecase" disabled class="w-32 !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Telefon -->
+                    <div class="space-y-1">
+                        <label for="telefon" class="block text-sm font-medium text-gray-600">{{ 'common.partner.telefon' | translate }}</label>
+                        <input pInputText id="telefon" [value]="selectedPerson.telefon || ''" disabled class="w-full !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-1">
+                        <label for="email" class="block text-sm font-medium text-gray-600">{{ 'common.partner.email' | translate }}</label>
+                        <input pInputText id="email" [value]="selectedPerson.email || ''" disabled class="w-full !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-4">
+                    <!-- Vorname -->
+                    <div class="space-y-1">
+                        <label for="vorname" class="block text-sm font-medium text-gray-600">{{ 'common.partner.vorname' | translate }}</label>
+                        <input pInputText id="vorname" [value]="selectedPerson.vorname" disabled class="w-full !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- PLZ, Ort -->
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-gray-600">{{ 'fuv.police.versichertePerson.plzOrt' | translate }}</label>
+                        <div class="flex gap-2">
+                            <input pInputText [value]="selectedPerson.plz || ''" disabled class="w-20 !bg-gray-50 !cursor-not-allowed" />
+                            <input pInputText [value]="selectedPerson.ort || ''" disabled class="flex-1 !bg-gray-50 !cursor-not-allowed" />
+                        </div>
+                    </div>
+
+                    <!-- SV-Nr. -->
+                    <div class="space-y-1">
+                        <label for="svnr" class="block text-sm font-medium text-gray-600">{{ 'common.partner.svnr' | translate }}</label>
+                        <input pInputText id="svnr" [value]="selectedPerson.svnr | svNrFormat" disabled class="w-48 !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Zivilstand -->
+                    <div class="space-y-1">
+                        <label for="zivilstand" class="block text-sm font-medium text-gray-600">{{ 'fuv.police.versichertePerson.zivilstand' | translate }}</label>
+                        <input pInputText id="zivilstand" [value]="selectedPerson.zivilstand || 'ledig' | titlecase" disabled class="w-48 !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- Mobiltelefon -->
+                    <div class="space-y-1">
+                        <label for="mobiltelefon" class="block text-sm font-medium text-gray-600">{{ 'common.partner.mobile' | translate }}</label>
+                        <input pInputText id="mobiltelefon" [value]="selectedPerson.mobiltelefon || ''" disabled class="w-full !bg-gray-50 !cursor-not-allowed" />
+                    </div>
+
+                    <!-- S/U-Status -->
+                    <div class="space-y-1">
+                        <label for="su-status" class="block text-sm font-medium text-gray-600">S/U-Status</label>
+                        <input pInputText id="su-status" value="S/U-Status: Unklar" disabled class="w-full !bg-red-100 !border-red-300 !text-red-800 !cursor-not-allowed" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div>
+
+<p-dialog header="{{ 'fuv.police.versichertePerson.searchDialogHeader' | translate }}" [(visible)]="displaySearchDialog" [modal]="true" [style]="{ width: '80vw' }">
+    <app-person-search [isDialog]="true" (personSelected)="onPersonSelected($event)"></app-person-search>
+</p-dialog>

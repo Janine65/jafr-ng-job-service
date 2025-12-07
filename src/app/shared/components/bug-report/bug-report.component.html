@@ -1,0 +1,92 @@
+<p-toast></p-toast>
+<p-dialog
+    [header]="'bugReport.title' | translate"
+    [visible]="bugReportService.showDialogSignal()"
+    (visibleChange)="!$event && closeDialog()"
+    [modal]="true"
+    [style]="{ width: '60vw', 'max-width': '700px', 'min-width': '450px' }"
+    [draggable]="false"
+    [resizable]="false"
+    [contentStyle]="{ 'overflow-y': 'auto' }"
+    (onHide)="closeDialog()"
+>
+    <div class="p-fluid grid formgrid" *ngIf="reportData() as currentReportData; else loadingTemplate">
+        <!-- Description Section -->
+        <div class="field col-12">
+            <label for="description" class="font-semibold mb-2">{{ 'bugReport.descriptionLabel' | translate }}</label>
+            <textarea id="description" rows="5" pTextarea [(ngModel)]="description" [placeholder]="'bugReport.descriptionPlaceholder' | translate" [autoResize]="true" class="w-full"></textarea>
+        </div>
+        <!-- End Description Section -->
+
+        <!-- Screenshot Section -->
+        <div class="field col-12">
+            <!-- Screenshot prohibited message -->
+            <div *ngIf="isScreenshotProhibited()" class="mb-3">
+                <div class="p-3 border rounded-lg bg-amber-50 border-amber-300">
+                    <div class="flex items-start gap-2">
+                        <i class="pi pi-exclamation-triangle text-amber-600 text-2xl mt-0.5"></i>
+                        <div class="flex-1">
+                            <h5 class="mt-0 mb-2 font-semibold text-amber-900">
+                                {{ 'bugReport.screenshotProhibitedTitle' | translate }}
+                            </h5>
+                            <p class="m-0 text-amber-800 leading-relaxed">
+                                {{ 'bugReport.screenshotProhibitedMessage' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screenshot available with toggle -->
+            <div *ngIf="currentReportData.screenshotPreview && !isScreenshotProhibited()">
+                <div class="flex align-items-center mb-2">
+                    <p-checkbox [(ngModel)]="includeScreenshot" [binary]="true" inputId="includeScreenshotCb" [disabled]="!canToggleScreenshot()"></p-checkbox>
+                    <label for="includeScreenshotCb" class="ml-2 cursor-pointer">{{ 'bugReport.includeScreenshotLabel' | translate }}</label>
+                </div>
+                <div *ngIf="includeScreenshot" class="border-1 surface-border border-round p-3">
+                    <h5 class="mt-0 mb-2 font-semibold">{{ 'bugReport.screenshotPreviewLabel' | translate }}</h5>
+                    <img [src]="currentReportData.screenshotPreview" alt="Screenshot Preview" class="max-w-full max-h-[300px] object-contain border border-surface-300 rounded" />
+                </div>
+            </div>
+
+            <!-- No screenshot available (and not prohibited - just failed) -->
+            <div *ngIf="!currentReportData.screenshotPreview && !isScreenshotProhibited()" class="mb-3">
+                <div class="p-3 border rounded-lg bg-blue-50 border-blue-300">
+                    <div class="flex items-start gap-2">
+                        <i class="pi pi-info-circle text-blue-600 text-2xl mt-0.5"></i>
+                        <div class="flex-1">
+                            <p class="m-0 text-blue-800 leading-relaxed">
+                                {{ 'bugReport.noScreenshotAvailable' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Screenshot Section -->
+
+        <!-- Collected Information Section -->
+        <div class="field col-12" *ngIf="currentReportData.collectedInfo">
+            <h5 class="mt-0 mb-2 font-semibold">{{ 'bugReport.collectedInfoLabel' | translate }}</h5>
+            <pre class="surface-ground p-3 border-round text-sm whitespace-pre-wrap overflow-auto max-h-[200px]">{{ currentReportData.collectedInfo | json }}</pre>
+        </div>
+        <!-- End Collected Information Section -->
+
+        <div *ngIf="submissionError" class="col-12 mt-2">
+            <div class="p-message p-message-error w-full">
+                <div class="p-message-text">{{ submissionError }}</div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #loadingTemplate>
+        <div class="flex justify-center items-center min-h-[250px] w-full">
+            <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button [label]="'bugReport.cancelButton' | translate" icon="pi pi-times" (click)="closeDialog()" class="p-button-text" [disabled]="isSubmitting"></p-button>
+        <p-button [label]="'bugReport.submitButton' | translate" icon="pi pi-check" (click)="submitReport()" [loading]="isSubmitting" [disabled]="isSubmitting"></p-button>
+    </ng-template>
+</p-dialog>
