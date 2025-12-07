@@ -1,367 +1,40 @@
 {
-  "$schema": "node_modules/nx/schemas/project-schema.json",
-  "name": "kpm-ng",
-  "projectType": "application",
-  "generators": {
-    "@schematics/angular:component": {
-      "style": "scss"
-    }
-  },
-  "sourceRoot": "src",
-  "prefix": "app",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "name": "job-service",
+  "projectType": "library",
+  "sourceRoot": "src_job/src",
+  "prefix": "lib",
   "targets": {
-    "check-sheetjs-update": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem node ./scripts/check-sheetjs-update.ts"
-      },
-      "configurations": {
-        "update": {
-          "command": "NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem node ./scripts/check-sheetjs-update.ts --update"
-        }
-      }
-    },
-    "check:sheetjs": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ts-node ./scripts/check-sheetjs-update.ts"
-      },
-      "configurations": {
-        "update": {
-          "command": "NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ts-node ./scripts/check-sheetjs-update.ts --update"
-        }
-      },
-      "metadata": {
-        "description": "Check for SheetJS library updates"
-      }
-    },
-    "check:i18n": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "ts-node scripts/check-translations.ts"
-      },
-      "metadata": {
-        "description": "Check for missing translations (required before production build)"
-      }
-    },
-    "update:sheetjs": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ts-node ./scripts/check-sheetjs-update.ts --update"
-      },
-      "metadata": {
-        "description": "Update SheetJS library to latest version"
-      }
-    },
-    "generate-models": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "ts-node -r tsconfig-paths/register scripts/generate-models.ts"
-      }
-    },
-    "generate-services": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "ts-node --project tsconfig.scripts.json scripts/generate-services.ts"
-      }
-    },
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@nx/angular:ng-packagr-lite",
       "options": {
-        "outputPath": "dist/kpm-ng",
-        "index": "src/index.html",
-        "browser": "src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
-        "tsConfig": "tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
-        "preserveSymlinks": false,
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "public"
-          },
-          {
-            "glob": "**/*",
-            "input": "src/assets",
-            "output": "assets"
-          }
-        ],
-        "styles": [
-          "src/styles.scss"
-        ],
-        "scripts": []
+        "project": "src_job/ng-package.json"
       },
       "configurations": {
-        "prod": {
-          "tsConfig": "tsconfig.app.prod.json",
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "1mb",
-              "maximumError": "5mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
-          ],
-          "outputHashing": "all",
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.json",
-              "with": "src/environments/environment.prod.json"
-            }
-          ]
+        "production": {
+          "tsConfig": "src_job/tsconfig.lib.prod.json"
         },
-        "dev": {
-          "optimization": false,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "preserveSymlinks": true,
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.json",
-              "with": "src/environments/environment.dev.json"
-            }
-          ]
-        },
-        "syst": {
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.json",
-              "with": "src/environments/environment.syst.json"
-            }
-          ]
-        },
-        "intg": {
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.json",
-              "with": "src/environments/environment.intg.json"
-            }
-          ]
-        },
-        "mock": {
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.json",
-              "with": "src/environments/environment.mock.json"
-            }
-          ],
-          "optimization": false,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "preserveSymlinks": true
+        "development": {
+          "tsConfig": "src_job/tsconfig.lib.json"
         }
       },
-      "defaultConfiguration": "mock",
-      "outputs": [
-        "{options.outputPath}"
-      ]
-    },
-    "build:prod": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "ts-node scripts/check-translations.ts",
-          "nx build --configuration production"
-        ],
-        "parallel": false
-      },
-      "metadata": {
-        "description": "Build for production (checks translations first)"
-      }
-    },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "options": {
-        "buildTarget": "kpm-ng:build:mock",
-        "proxyConfig": "proxy.conf.cjs"
-      },
-      "configurations": {
-        "prod": {
-          "buildTarget": "kpm-ng:build:prod"
-        },
-        "dev": {
-          "buildTarget": "kpm-ng:build:dev"
-        },
-        "syst": {
-          "buildTarget": "kpm-ng:build:syst"
-        },
-        "intg": {
-          "buildTarget": "kpm-ng:build:intg"
-        },
-        "mock": {
-          "buildTarget": "kpm-ng:build:mock"
-        }
-      }
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n"
+      "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@nx/jest:jest",
       "options": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
-        "tsConfig": "tsconfig.spec.json",
-        "inlineStyleLanguage": "scss",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "public"
-          }
-        ],
-        "styles": [
-          "src/styles.scss"
-        ],
-        "scripts": []
+        "jestConfig": "src_job/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
-          "src/**/*.ts",
-          "src/**/*.html"
+          "src_job/**/*.ts",
+          "src_job/**/*.html"
         ]
       }
-    },
-    "copy-env": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/copy-environments.cjs {args.env}"
-      }
-    },
-    "serve:dev": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "node scripts/generate-test-manifest.js",
-          "node scripts/copy-environments.cjs dev",
-          "nx serve"
-        ],
-        "parallel": false
-      }
-    },
-    "serve:mock": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "node scripts/generate-test-manifest.js",
-          "node scripts/copy-environments.cjs mock",
-          "nx serve"
-        ],
-        "parallel": false
-      }
-    },
-    "serve:syst": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "node scripts/generate-test-manifest.js",
-          "node scripts/copy-environments.cjs syst",
-          "nx serve"
-        ],
-        "parallel": false
-      }
-    },
-    "serve:intg": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "node scripts/generate-test-manifest.js",
-          "node scripts/copy-environments.cjs intg",
-          "nx serve"
-        ],
-        "parallel": false
-      }
-    },
-    "serve:prod": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "node scripts/generate-test-manifest.js",
-          "node scripts/copy-environments.cjs prod",
-          "nx serve"
-        ],
-        "parallel": false
-      }
-    },
-    "core:setup": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/setup-core.cjs"
-      },
-      "configurations": {
-        "auto": {
-          "command": "AUTO_CLONE_CORE=true node scripts/setup-core.cjs"
-        },
-        "skip-install": {
-          "command": "SKIP_INSTALL=true node scripts/setup-core.cjs"
-        }
-      },
-      "metadata": {
-        "description": "Setup and link @syrius/core library for local development"
-      }
-    },
-    "core:setup:auto": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "AUTO_CLONE_CORE=true node scripts/setup-core.cjs"
-      },
-      "metadata": {
-        "description": "Setup and link @syrius/core library automatically (no prompts)"
-      }
-    },
-    "core:link": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "cd ../syr-ng-core && pnpm link --global",
-          "pnpm link --global @syrius/core"
-        ],
-        "parallel": false
-      },
-      "metadata": {
-        "description": "Link @syrius/core library for local development (requires syr-ng-core to be cloned)"
-      }
-    },
-    "core:unlink": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "pnpm unlink --global @syrius/core",
-          "pnpm install --force"
-        ],
-        "parallel": false
-      },
-      "metadata": {
-        "description": "Unlink @syrius/core and use npm package version"
-      }
-    },
-    "core:build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "cd ../syr-ng-core && pnpm build"
-      },
-      "metadata": {
-        "description": "Build the @syrius/core library (requires syr-ng-core to be cloned)"
-      }
-    },
-    "core:status": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "test -L node_modules/@syrius/core && echo '✅ @syrius/core is LINKED for local development' || echo '📦 @syrius/core is using NPM PACKAGE version'"
-      },
-      "metadata": {
-        "description": "Check if @syrius/core is linked or using npm package"
-      }
     }
-  }
+  },
+  "tags": []
 }

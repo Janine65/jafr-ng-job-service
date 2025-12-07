@@ -1,0 +1,130 @@
+<div class="p-4 border border-gray-300 rounded-lg bg-white">
+  <div
+    class="flex justify-between items-center mb-4 pb-2 border-b border-gray-300"
+  >
+    <h3 class="m-0 text-gray-800">
+      {{ jobDetails?.jobName || "Job Details" }}
+    </h3>
+    <div
+      class="px-3 py-1 rounded-full text-xs font-bold uppercase"
+      [ngClass]="{
+        'bg-yellow-100 text-yellow-700': jobDetails?.status === 'pending',
+        'bg-blue-100 text-blue-700': jobDetails?.status === 'running',
+        'bg-green-100 text-green-700': jobDetails?.status === 'completed'
+      }"
+    >
+      {{ jobDetails?.status | titlecase }}
+    </div>
+  </div>
+
+  <div class="flex gap-6 mb-6 flex-wrap" *ngIf="jobDetails">
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-600 font-medium">Progress:</span>
+      <span class="text-lg font-bold">{{ jobDetails.progress }}%</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-600 font-medium">Total:</span>
+      <span class="text-lg font-bold">{{ jobDetails.total }}</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-600 font-medium">Success:</span>
+      <span class="text-lg font-bold text-green-600">{{
+        jobDetails.successCount
+      }}</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-600 font-medium">Failed:</span>
+      <span class="text-lg font-bold text-red-600">{{
+        jobDetails.failedCount
+      }}</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-gray-600 font-medium">Pending:</span>
+      <span class="text-lg font-bold text-yellow-500">{{
+        jobDetails.pendingCount
+      }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="jobDetails?.entries?.length">
+    <h4 class="m-0 mb-4 text-gray-800">Job Entries</h4>
+    <div class="max-h-96 overflow-y-auto">
+      <div
+        *ngFor="let entry of jobDetails?.entries"
+        class="p-3 mb-2 border border-gray-300 rounded-md bg-gray-50"
+        [ngClass]="{
+          'border-l-4 border-l-green-500':
+            entry.status.toLowerCase() === 'success',
+          'border-l-4 border-l-red-500':
+            entry.status.toLowerCase() === 'failed',
+          'border-l-4 border-l-yellow-500':
+            entry.status.toLowerCase() === 'pending',
+          'border-l-4 border-l-blue-500':
+            entry.status.toLowerCase() === 'running'
+        }"
+      >
+        <div
+          class="flex justify-between items-center mb-2 md:flex-row flex-col md:gap-0 gap-2 md:items-center items-start"
+        >
+          <span class="font-medium text-gray-800">{{ entry.itemName }}</span>
+          <span
+            class="px-2 py-1 rounded-xl text-xs font-bold uppercase"
+            [ngClass]="{
+              'bg-green-100 text-green-700':
+                entry.status.toLowerCase() === 'success',
+              'bg-red-100 text-red-800':
+                entry.status.toLowerCase() === 'failed',
+              'bg-yellow-100 text-yellow-700':
+                entry.status.toLowerCase() === 'pending',
+              'bg-blue-100 text-blue-700':
+                entry.status.toLowerCase() === 'running'
+            }"
+          >
+            {{ entry.status }}
+          </span>
+        </div>
+
+        <div class="text-sm text-gray-600 mb-2" *ngIf="entry.details">
+          {{ entry.details }}
+        </div>
+
+        <div
+          class="bg-red-100 text-red-800 p-2 rounded text-sm mb-2"
+          *ngIf="entry.errorMessage"
+        >
+          <strong>Error:</strong> {{ entry.errorMessage }}
+        </div>
+
+        <div
+          class="text-gray-500 text-xs"
+          *ngIf="entry.startTime || entry.endTime"
+        >
+          <small>
+            <span *ngIf="entry.startTime"
+              >Started: {{ entry.startTime | date : "short" }}</span
+            >
+            <span *ngIf="entry.endTime">
+              | Ended: {{ entry.endTime | date : "short" }}</span
+            >
+            <span *ngIf="entry.duration">
+              | Duration: {{ entry.duration }}ms</span
+            >
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="text-center py-8 text-gray-600"
+    *ngIf="
+      jobDetails && (!jobDetails.entries || jobDetails.entries.length === 0)
+    "
+  >
+    <p>No job entries available.</p>
+  </div>
+
+  <div class="text-center py-8 text-gray-600" *ngIf="isLoading">
+    <p>Loading job details...</p>
+  </div>
+</div>
